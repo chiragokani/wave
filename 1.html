@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fourier acoustics and angular spectra</title>
+ <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+   </script>
+<script>
+window.MathJax = {
+  tex: {
+    tags: 'ams'
+  }
+};
+</script>
+<script type="text/javascript">
+window.MathJax = {
+  tex: {
+    macros: {
+      Order: "{\\mathcal O}",
+      vec: ['\\boldsymbol{#1}',1] ,
+      div: "{\\boldsymbol{\\nabla}\\cdot}",
+      grad: "{\\boldsymbol\\nabla}",
+      curl: "{\\boldsymbol\\nabla\\times}",
+      Laplacian: "{\\nabla^2}",
+      dAlambertian: "{\\Box^2}",
+      Order: "{\\mathcal O}",
+      T: "{^\\mathsf{T}}",
+      FTt: "{\\mathcal{F}_t}",
+      IFTt: "{\\mathcal{F}_t^{-1}}",
+      FTxy: "{\\mathcal{F}_{xy}}",
+      IFTxy: "{\\mathcal{F}_{xy}^{-1}}",
+      rect: "{\\mathrm{\\,rect\\,}}"
+    }
+  }
+};
+</script>	
+  <style>
+    body {
+      margin: 20px;
+      background: linear-gradient(to bottom, #577abdd8, #e9bb58dc);
+      font-family: Arial, sans-serif;
+      height: 100%;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      line-height: 1.5;
+    }
+
+    .textbox {
+      background-color: rgba(241, 241, 241, 0.925);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .example {
+      background-color: rgba(255, 253, 233, 0.836);
+      border-radius: 3px;
+      padding-top: 0px;
+      padding-bottom: 0px;
+      padding-right: 20px;
+      padding-left: 20px;
+      margin-bottom: 5px;
+      border-style: solid;
+      border-width: thin;
+      border-color: #f5f0d4;
+    }
+
+    .wrong {
+      background-color: rgba(255, 205, 205, 0.856);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    nav {
+      background-color: #0000003d;
+      margin-bottom: 20px;
+    }
+
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+    }
+
+    nav ul li {
+      flex: 1;
+    }
+
+    nav ul li a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      text-align: center;
+      padding: 3px;
+    }
+
+    nav ul li a:hover {
+      background-color: #03030365;
+    }
+
+    .Q {
+      color:  #9e0702;
+      font-style: italic;
+    }
+  </style>
+
+</head>
+<body>
+  <nav>
+    <ul>
+	 <li><a href="index.html"> &#127968;</a></li>
+      <li><a href="1.html">1</a></li>
+      <li><a href="2.html">2</a></li>
+      <li><a href="3.html">3</a></li>
+      <li><a href="4.html">4</a></li>
+      <li><a href="5.html">5</a></li>
+      <li><a href="6.html">6</a></li>
+      <li><a href="7.html">7</a></li>
+    </ul>
+  </nav>
+
+<div class="textbox">
+<h1>Fourier acoustics and angular spectra</h1>
+
+<p>
+  <i>Contents:</i>
+<ul>
+<li><a href="#linear">Linear systems theory</a></li>
+<li><a href="#2">2D spatial Fourier transform </a></li>
+<li><a href="#wave_prop">Wave propagation from position \((x,y,z=z_0)\) to \((x,y,z=z_0 + \Delta z)\)</a></li>
+<li><a href="#some">Some helpful tidbits about the Fourier transform</a></li>
+</ul>	
+Difficult topics are coloured red, and my personal comments/questions are in <span class="Q">italicized red</span>.</p>
+
+<p>Introductory remarks about logistics and such were made. Come O brother of my mind; let us dive into the phenomenal world of waves!</p>
+</div>
+
+<div class="textbox"><h2 id="linear">Linear systems theory</h2>
+We begin by discussing the time transform. Fourier transforms are linear operations and hence lend themselve to problems that are linear. The temporal Fourier transform (FT) pair is given by
+\begin{align}
+X(\omega) &= \FTt\{x(t)\} = \int_{-\infty}^{\infty} x(t) e^{i\omega t} dt\\
+x(t) &= \IFTt \{X(\omega)\} = \frac{1}{2\pi} \int_{-\infty}^{\infty} X(\omega) e^{-i\omega t} d\omega
+\end{align}
+The response of a linear system is illustrated schematically below: 
+\begin{align*}
+x(t) \xrightarrow{\FTt\{x(t)\}} X(\omega) \xrightarrow{H(\omega) X(\omega)} Y(\omega)\xrightarrow{\IFTt\{Y(\omega)\}} y(t)\,,
+\end{align*}
+where \(H(\omega)\) is the so-called transfer function. 
+</div>
+
+<div class="textbox"><h2 id="2">2D spatial Fourier transform </h2>
+The two-dimensional (2D) spatial FT will prove to be useful:
+\begin{align*}
+F(k_x,k_y) &= \FTxy \{f(x,y)\} = \iint_{-\infty}^\infty f(x,y) e^{-i(k_xx+ k_yy)}dxdy\\
+F(x,k) &= \IFTxy \{F(x,y)\} = \frac{1}{4\pi^2}\iint_{-\infty}^\infty F(k_x,k_y) e^{i(k_xx+ k_yy)}dk_xdk_y
+\end{align*}
+Wavenumber space is sometimes referred to as \(k\)-space. Note that \(k\)-space itself arises in the first place from taking a time FT (of the wave equation). Beware of the different sign conventions used in physics and engineering.
+</div>
+
+<div class="textbox"><h2 id="wave_prop">Wave propagation from position \(x,y,z=z_0\) to \(x,y,z=z_0 + \Delta z\)</h2>
+
+<p>The Fourier transform shall be used to propagate from position \(x,y,z=z_0\) to a parallel plane \(x,y,z=z_0 + \Delta z\) as follows. First take the Fourier time transform \(\FTt\) to obtain \(p_\omega\):
+\begin{align*}
+p(x,y,z,t_0) \xrightarrow{\FTt\{p(x,y,z,t_0)\}} p_\omega(\omega,x,y,z_0)\,.
+\end{align*}
+Then take the 2D spatial Fourier transform to obtain \(P_\omega(k_x,k_y,z_0)\) (note capital letters are used for spatial domain quantities):
+\begin{align*}
+p_\omega(\omega,x,y,z_0)\xrightarrow{\FTxy\{p_\omega(x,y,z_0)\}} P_\omega(k_x,k_y,z_0) \,.
+\end{align*}
+Next, apply the transfer function to \(P_\omega(k_x,k_y,z_0)\) to advance spatially. 
+\begin{align*}
+P_\omega(k_x,k_y,z_0) \xrightarrow{H(k_x,k_y) P_\omega(k_x,k_y,z_0)}  P_\omega(k_x,k_y,z_0 + \Delta z) \,.
+\end{align*}
+Finally, take the inverse 2D spatial FT to return from \(k\)-space to physical space. 
+\begin{align*}
+P_\omega(k_x,k_y,z_0 + \Delta z)\xrightarrow{\IFTxy \{P_\omega(k_x,k_y,z_0 + \Delta z)\}}  p_\omega(x,y,z+\Delta z)\,.
+\end{align*}
+The above step shall be the stopping point in this class (since we will work largely in \(k\)-space, i.e., our interest is in solving the Helmholtz equation, not the wave equation). If desired, however, one can take the inverse time Fourier transform, viz., \(\IFTt\{p_\omega(x,y,z+\Delta z)\}\) to obtain \(p(x,y,z+\Delta z,t)\).</p>
+
+<p>
+What is the transfer function? We will find that 
+\[H(k_x,k_y) = e^{ik_z\Delta z},\quad k_z = \sqrt{\frac{\omega^2}{c_0^2} - k_x^2 - k_y^2}\,.\]</p>
+
+<div class="example"><h3>Aside on how to correctly interpret \(p_\omega\) in the equations above</h3>
+We will represent the time dependence as 
+\begin{align*}
+p(\vec{r},t) = p_\omega (\vec{r}) e^{-i\omega t} = |p_\omega(r)| e^{i\phi_\omega(\vec{r})} e^{-i\omega t}
+\end{align*}
+and interpret \(|p_\omega(\vec{r})|\) as the peak pressure of \(p(t)\).</p>
+
+<p>Do not try to identify \(p_\omega\) from \(P_\omega\), as illustrated in the following example: Consider the pressure wave \(p(t)=p_0\cos\omega_0t\). Since there is no spatial dependence, \(p_\omega\) should be identified as \(p_0\). Meanwhile, the time FT is
+\begin{align*}
+\FTt \{p_0\cos\omega_0t\}&= \int_{-\infty}^{\infty} p_0\frac{e^{i\omega_0 t} + e^{-i\omega_0 t} }{2} e^{i\omega t} dt\\
+&= \frac{p_0}{2}\int_{-\infty}^{\infty} (e^{i\omega_0 t} + e^{-i\omega_0 t}) e^{i\omega t} dt\\
+&= \pi p_0 [\delta(\omega+\omega_0) + \delta(\omega-\omega_0)]\,,
+\end{align*}
+where one might be tempted to define \(p_\omega \) as \(\pi p_0\).
+</p>
+</div>
+</div>
+
+<div class="textbox"><h2 id="some">Some helpful tidbits about the Fourier transform</h2>
+<p>For this discussion, consider the 1D spatial Fourier transform:
+\begin{align}
+F(k_x) &= \mathcal{F}_x \{f(x)\} = \int_{-\infty}^{\infty} f(x)e^{-ik_xx}dx \label{F}\tag{1}\\
+f(x) &= \mathcal{F}_x^{-1} \{F(k_x)\} = \frac{1}{2\pi}\int_{-\infty}^{\infty} F(k_x)e^{ik_xx}dk_x\,. \label{f}\tag{2}
+\end{align}
+The sign convention corresponds to the \(e^{i\omega t}\) time dependence such that 
+\begin{align*}
+f(x) e^{i\omega t} = \frac{1}{2\pi} \int_{-\infty}^{\infty} F(k_x) e^{i(k_xx-\omega t)} dk_x
+\end{align*}
+is a forward-traveling wave.</p>
+
+<p>Some authors, e.g., (Goodman) let \(k_x = 2\pi f_x\) such that the Fourier transforms are symmetric.
+\begin{align*}
+\mathcal{F}_x^G \{f(x)\} &= \int_{-\infty}^{\infty} f(x) e^{-i2\pi f_xx}dx \equiv F^G(k_x)\\
+\mathcal{F}_x^{-1,G} \{F(k_x)\} &= \int_{-\infty}^{\infty} F^G(k_x) e^{i2\pi f_xx}df_x\,,
+\end{align*}
+where \(dk_x = 2\pi df_x\). We will avoid this in favour of Eqs.  Eqs. \eqref{F} and \eqref{f}. Simply beware of these alternate definitions.</p>
+
+<p>Properties of Eqs. \eqref{F} and \eqref{f} are given in Papoulis table with the following substitutions:
+\begin{align*}
+t\mapsto x\\
+\omega \mapsto k_x\\
+j \mapsto i\,.
+\end{align*}
+</p>
+
+<div class="example"><h3>Example of Fourier transform of a commonly used function</h3>
+Define 
+\begin{align*}
+\rect x = \begin{cases}
+1, \quad |x| \leq 1/2\\
+0, \quad |x| > 1/2
+\end{cases}\,,
+\end{align*}
+and let 
+\begin{align*}
+f(x) = A \rect(x/L)\,.
+\end{align*}
+Take the Fourier transform: 
+\begin{align*}
+\mathcal{F}_x\{f(x)\} &= A\int_{-L/2}^{L/2} e^{-ik_xx}dx\\
+&= \frac{A}{-ik_x} (e^{-ik_xL/2} - e^{ik_xL/2})\\
+&= \frac{2A}{k_x} \sin (k_xL/2)\\
+&= AL \frac{\sin (k_xL/2)}{k_xL/2} = ALj_0(k_xL/2)\,.\\
+&= AL,\quad k_x = 0\,.
+\end{align*}
+That is to say, the Fourier transform evaluated at \(k_x = 0\) is the area under the curve:
+\begin{equation*}
+F(k_x = 0) = \int_{-\infty}^{\infty} f(x)dx\,.
+\end{equation*}
+</div>
+</div>
+
+<!--<div class="wrong"><h2 id="4">1-4</h2>
+I, humble bat.   
+</div>-->
+
+</div>
+</body>
+</html>
