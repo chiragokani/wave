@@ -28,10 +28,18 @@ window.MathJax = {
       T: "{^\\mathsf{T}}",
       FTt: "{\\mathcal{F}_t}",
       IFTt: "{\\mathcal{F}_t^{-1}}",
+      FTx: "{\\mathcal{F}_x}",
+      IFTx: "{\\mathcal{F}_x^{-1}}",      
+      FTr: "{\\mathcal{F}_\\rho}",
+      IFTr: "{\\mathcal{F}_\\rho^{-1}}",    
+      HT: "{\\mathcal{H}_\\rho}",
+      IHT: "{\\mathcal{H}_\\rho^{-1}}",  
       FTxy: "{\\mathcal{F}_{xy}}",
       IFTxy: "{\\mathcal{F}_{xy}^{-1}}",
       rect: "{\\mathrm{\\,rect\\,}}",
       tri: "{\\mathrm{\\,tri\\,}}",
+      circfn: "{\\mathrm{\\,circ\\,}}",
+      sinc: "{\\mathrm{\\,sinc\\,}}",
       ex: "{\\hat{e}_x}",           
       ey: "{\\hat{e}_y}",
       ez: "{\\hat{e}_z}"
@@ -51,7 +59,7 @@ window.MathJax = {
     }
 
     .textbox {
-      background-color: rgba(241, 241, 241, 0.925);
+      background-color: rgba(241, 241, 241, 0.986);
       border-radius: 10px;
       padding: 20px;
       margin-bottom: 20px;
@@ -60,11 +68,11 @@ window.MathJax = {
     .example {
       background-color: rgba(197, 197, 197, 0.836);
       border-radius: 3px;
-      padding-top: 0px;
-      padding-bottom: 0px;
+      padding-top: 1px;
+      padding-bottom: 10px;
       padding-right: 20px;
       padding-left: 20px;
-      margin-bottom: 5px;
+      margin-bottom: 20px;
       border-style: solid;
       border-width: thin;
       border-color: #9b9b9b94;
@@ -163,6 +171,8 @@ window.MathJax = {
 <li><a href="#2D">2D spatial Fourier transform </a></li>
 <li><a href="#transform_theorems">Transform theorems</a></li>
 <li><a href="#angspec">The angular spectrum</a></li>
+<li><a href="#Hankel">Hankel transform</a></li>
+<li><a href="#Dirac">Dirac delta functions</a></li>
 
 </ul>	
 Difficult topics are coloured red, and my personal comments/questions are in <span class="Q">italicized red</span>. </p>
@@ -182,7 +192,7 @@ where \(H(\omega)\) is the so-called transfer function. </p>
 
 <p><span class="Q">I find it helpful to remember that "\(\mathcal{F}\)" (\(\texttt{\mathcal{F}}\) in LaTeX) corresponds to the operator \(\int_{-\infty}^\infty \dots dt\), while an upper case letter corresponds to the transformed lower case function.</span></p> 
 
-<div class="example"><h3>Example: Wave propagation from position \(x,y,z=z_0\) to \(x,y,z=z_0 + \Delta z\) </h3>
+<div class="example"><h3>Example: wave propagation from position \(x,y,z=z_0\) to \(x,y,z=z_0 + \Delta z\) </h3>
 <p>As a sneak-peek for what is to come, we outline (informally) how use the Fourier transform (both temporal and spatial, discussed further in the following sections) to propagate from position \(x,y,z=z_0\) to a parallel plane \(x,y,z=z_0 + \Delta z\) following <a href="#linear">the general "recipe" provided above</a>.
 <p align="middle"> <img src="FTexample.svg" width="225" height="auto"></p>
 First take the Fourier time transform \(\FTt\) to obtain \(p_\omega\):
@@ -256,8 +266,8 @@ j \mapsto i\,.
 Define 
 \begin{align*}
 \rect x = \begin{cases}
-1, \quad |x| \leq 1/2\\
-0, \quad |x| > 1/2
+1, \quad &|x| \leq 1/2\\
+0, \quad &|x| > 1/2
 \end{cases}\,,
 \end{align*}
 and let 
@@ -293,10 +303,10 @@ Wavenumber space is sometimes referred to as "\(k\)-space." Note that \(k\)-spac
 F(k_x,k_y) &= \FTxy \{f(x,y)\} = \iint_{-\infty}^\infty f(x,y) e^{-i(k_xx + k_yy)} dx dy\\
 f(x,y) &= \IFTxy \{F(k_x,k_y)\} = \frac{1}{4\pi^2}\iint_{-\infty}^\infty F(k_x,k_y) e^{i(k_xx + k_yy)} dx dy
 \end{align*}
-Note that the operators commute:
+Note that the operators <a href="https://en.wikipedia.org/wiki/Fubini%27s_theorem" target="_blank" rel="noopener noreferrer">commute</a>:
 \begin{align*}
 \FTxy\{f(x,y)\} &= \mathcal{F}_y\{\mathcal{F}_x [f(x,y)]\}\\
-&= \mathcal{F}_x\{\mathcal{F}_y [f(x,y)]\}
+&= \mathcal{F}_x\{\mathcal{F}_y [f(x,y)]\}\,,
 \end{align*}
 and if \(f(x,y) = g(x)h(y)\) then \(\mathcal{F}\{f(x,y)\} = G(k_x)H(k_y)\). </p>
 
@@ -312,7 +322,7 @@ f(\vec{\rho}) &= \int F(\vec{\kappa})e^{i\vec{\kappa}\cdot\vec{\rho}} d\vec{\kap
 \end{align*}
  </p>
 
-<p><span class="Q">The notation in this section might be slightly confusing, because \(F\) refers to the transformed "version" of \(f\), whereas \(\mathcal{F}\) is the integral transformation. It helps to loosely think, "\(f\) is the uncooked meal, \(F\) is the cooked meal, and \(\mathcal{F}\) is the microwave." </span> </p>
+<p><span class="Q">The different uses of the letter "f" might be confusing. To reiterate: \(F\) refers to the transformed "version" of \(f\), whereas \(\mathcal{F}\) is the integral transformation. It helps to loosely think, "\(f\) is the uncooked meal, \(F\) is the cooked meal, and \(\mathcal{F}\) is the microwave." </span> </p>
 </div>
 
 
@@ -355,7 +365,7 @@ Invoking Eq. \eqref{f}, the Fourier transform is written explicitly:
 \mathcal{F}_x \bigg\{ \frac{\partial^n}{\partial x^n} f(x) \bigg\} 
 &= \mathcal{F}_x \bigg\{ \frac{\partial^n}{\partial x^n} \frac{1}{2\pi}\int_{-\infty}^{\infty}[F(k_x)]e^{ik_xx} dk_x \bigg\} \\
 \end{align*}
-The derivative is brought inside the integral and is evaluated:  
+The derivative is brought inside the integral, and the integrand is evaluated:  
 \begin{align*}
 \mathcal{F}_x \bigg\{ \frac{\partial^n}{\partial x^n} f(x) \bigg\} 
 &= \mathcal{F}_x \bigg\{\frac{1}{2\pi}\int_{-\infty}^{\infty} (ik_x)^n F(k_x)e^{ik_xx} dk_x \bigg\}
@@ -371,8 +381,8 @@ Since the forward and inverse transform are inverses, we obtain
 Define 
 \begin{align*}
 \tri(x) = \Lambda(x) \equiv \begin{cases}
-1-|x|\,, |x|\leq 1\\
-0\,, |x| >1
+1-|x|\,,\quad & |x|\leq 1\\
+0\,, \quad & |x| >1
 \end{cases}\,.
 \end{align*}
 </p>
@@ -403,11 +413,11 @@ But \(e^{ik_xL/2} - e^{-ik_xL/2} = 2i \sin (k_xL/2)\). So we have (after normali
 \begin{align*}
 \mathcal{F}_x \{f'(x)\} &= ik_x AL \bigg[\frac{\sin(k_xL/2)}{k_xL/2} \bigg]^2\,.
 \end{align*}
-However, this is the Fourier transform of the <i>derivative</i> of the triangle function. Thus we using the derivative theorem for \(n= 1\), 
+However, this is the Fourier transform of the <i>derivative</i> of the triangle function. Using the derivative theorem for \(n= 1\), 
 \begin{align*}
 \mathcal{F}_x\bigg\{ \frac{\partial }{\partial x} f(x)\bigg\} = ik_x F(k_x)\,,
 \end{align*} 
-to obtain the derivative of the triangle function:  
+we obtain the 1D spatial Fourier transform of the triangle function:  
 \begin{align*}
 F(k_x) = \mathcal{F}_x\{f(x)\} = AL\bigg[\frac{\sin(k_xL/2)}{k_xL/2} \bigg]^2\,.
 \end{align*}
@@ -417,9 +427,7 @@ As a sanity check, evaluate the FT at the origin of \(k\)-space and see if we ob
 
 <div class="textbox"><h2 id="angspec">The angular spectrum</h2>
 <p>
-The above discussion has been purely mathematical. Now let us apply this mathematics to the study of wave phenomena. </p>
-
-<p>Consider a time-harmonic acoustic pressure field:
+The above discussion has been purely mathematical. Now let us apply this mathematics to the study of wave phenomena. Consider a time-harmonic acoustic pressure field:
 \begin{align*}
 p(x,y,z,t) &= p_\omega(x,y,z) e^{-i\omega t}\,.
 \end{align*}
@@ -434,7 +442,7 @@ Let us characterize the field in the plane \(z =0\) as
 \begin{align*}
 p_\omega (x,y,0) = p_0(x,y)\,.
 \end{align*}
-The two spatial Fourier transform of this source condition is 
+The 2D spatial Fourier transform of this source condition is 
 \begin{align}
 P_0(k_x,k_y) = \iint_{-\infty}^\infty p_0(x,y) e^{-i(k_xx + k_yy)} dx dy\,, \label{angularspec}\tag{2}
 \end{align}
@@ -460,29 +468,207 @@ Each plane wave in the summation is uniquely determined by the pair \((k_x,k_y)\
 &= \vec{\kappa} + k_z \ez\,.
 \end{align*}
 Now we introduce spherical coordinates, where the meaning of the \(z\) axis is preserved between the Cartesian and spherical coordinates:
-\begin{align*}
-k_x &= k\sin\gamma \cos \psi\\
-k_y &= k\sin\gamma \sin \psi\\
+\begin{alignat*}{2}
+k_x &= k\sin\gamma \cos \psi &&= \kappa \cos \psi\\
+k_y &= k\sin\gamma \sin \psi && = \kappa \sin \psi\\
 k_z &= k\cos \gamma\,,
-\end{align*}
-where \(\gamma \) is the polar angle, while \(\psi\) is the azimuthal angle. 
+\end{alignat*}
+where \(\gamma \) is the polar angle <span class="Q">in \(k\)-space</span>, while \(\psi\) is the azimuthal angle <span class="Q">in \(k\)-space</span>. </p>
 <p align="middle"> <img src="spherical.svg" width="150" height="auto"></p>
 
-The ordered pair \((k_x,k_y)\) is uniquely defined by \((\psi,\gamma)\), and hence 
+<span class="Q">I do not know what to label the axes in the figure above. In future sections, you will see that they are labeled \((x,y,z)\), which I abhor, because these are spatial coordinates with dimensions of length, while the vectors \(\vec{k}\) and \(\vec{\kappa}\) have dimensions of inverse length. </span>
+
+<p>The ordered pair \((k_x,k_y)\) is uniquely defined by \((\psi,\gamma)\), and hence 
 \begin{align*}
 P_0(k_x,k_y) &= \text{ angular spectrum}
 =  P_0(\gamma,\psi)\,.
 \end{align*}
-Note that only components for which \(k_x^2 + k_y^2 < k^2\) can propagate. That is, outside we are outside a circle of radius \(|\vec{k}| = \omega/c_0\):
+Note that only components for which \(k_x^2 + k_y^2 < k^2\) can propagate. That is, outside a circle of radius \(|\vec{k}| = \omega/c_0\), the wave field is evanescent:
 <p align="middle"> <img src="prop_evan.svg" width="170" height="auto"></p>
 
-
 </p>
-
-
 </div>
 
 
+<div class="textbox"><h2 id="Hankel">Hankel transform</h2>
+<p>For axisymmetric cases, the Hankel transform (as apposed to the 2D spatial Fourier transform) proves to be useful. </p>
+
+<p>Suppose \(f(x,y) = f(\sqrt{x^2 + y^2}) = f(\rho)\). Then, the 2D spatial Fourier transform becomes 
+\begin{align*}
+\FTr \{f(\rho)\} &= \int_{0}^{2\pi}\!\!\int_{0}^{\infty} f(\rho) e^{-i\vec{\kappa} \cdot \vec{\rho}}\,  \rho \, d\rho \,  d\phi
+\end{align*}
+where sometimes the differential area element \(\rho \,  d\rho\,  d\phi\) is denoted  \(d\vec{\rho}\). The relationship between \(\rho\) and \(\kappa\) is shown below: 
+<p align="middle"> <img src="rho_kappa.svg" width="170" height="auto"></p>
+Since \(\vec{\kappa}\) is fixed, we may align \(\vec{\kappa}\) along the \(x\)-axis (i.e., set \(\psi =0\)) for the case that \(f \neq f(\phi)\). Then 
+\[\vec{\kappa}\cdot\vec{\rho} = \kappa \rho \cos \phi\,.\]
+and 
+\begin{align*}
+\FTr \{f(\rho)\}&= \int_{0}^{\infty} f(\rho)\rho d\rho \int_{0}^{2\pi} e^{-ik\rho \cos\phi} d\phi\,,
+\end{align*}
+and the polar integral is an integral identity of the 0th order Bessel function, \(2\pi J_0(\kappa\rho)\).
+Thus the transform becomes
+\begin{align*}
+\FTr \{f(\rho)\}&= 2\pi\int_{0}^{\infty} f(\rho) J_0(\kappa\rho)\,\rho \,d\rho 
+= F(\kappa)
+\end{align*}
+Define the Hankel transform:
+\begin{align}
+F_H(\kappa) &\equiv \HT\{f(\rho)\} = \int_{0}^{\infty} f(\rho) J_0(\kappa \rho) \,\rho \,d\rho \label{Hank}\tag{1}
+\end{align}
+Thus 
+\begin{align}\label{relation}\tag{2}
+F(\kappa) &= 2\pi F_H(\kappa)\,,
+\end{align}
+which is a critical (and annoying) difference between the Fourier and Hankel transforms. </p>
+
+<p>Similarly, the inverse 2D spatial  Fourier transform of an axisymmetric function \(k\)-space, \(F(\kappa)\), is
+\begin{align*}
+f(\rho) = \IFTr \{F(\kappa)\} = \frac{1}{4\pi^2} \iint F(\kappa) e^{i\vec{\kappa}\cdot \vec{\rho}}\, \kappa \,d\kappa \,d\psi
+\end{align*}
+Align \(\vec{\rho}\) with the \(k_x\) axis. Thus in this case
+\[\vec{\kappa} \cdot \vec{\rho} = \kappa \rho \cos \psi.\]
+So 
+\begin{align*}
+f(\rho) &= \frac{1}{2\pi} \int_{0}^{\infty}F(\kappa)J_0(\kappa\rho)\kappa \, d\kappa\\
+&=  \int_{0}^{\infty}F_H(\kappa)J_0(\kappa\rho)\kappa \, d\kappa\,,
+\end{align*}
+where the second equality follows from Eq. \eqref{relation}. So
+\begin{align}\label{Hankinv}\tag{3}
+f(\rho) &= \IHT \{F_H(\kappa)\}= \int_{0}^{\infty} F_H(\kappa)J_0(\kappa \rho) \kappa d\kappa\,.
+\end{align}
+Eqs. \eqref{Hank} and \eqref{Hankinv} are standard definitions of forward and inverse Hankel transforms, related to Fourier transforms by Eq. \eqref{relation}.</p>
+
+<div class="example"><h3>Example: Fourier transform of the \(\circfn\) function</h3>
+Define 
+\begin{align*}
+\circfn (\rho) = \begin{cases}
+1\,\quad &\rho \leq 1\\
+0\,\quad &\rho >1
+\end{cases} 
+\end{align*}
+and let \(f(\rho) =A \circfn (\rho/a)\). Then the <i>Hankel</i> transform of \(f(\rho)\) is 
+\begin{align*}
+\HT \{A \circfn (\rho/a)\} &= F_H(\kappa) = A \int_{0}^{a} J_0(\kappa \rho)\rho d\rho\,.
+\end{align*}
+Noting that \(\int_{0}^{t} J_0(t)\,t\, dt = xJ_1(x)\), the integral above is evaluated by letting \(t = \kappa \rho \) and hence \(dt = \kappa d\rho \), \(\rho d\rho = tdt/\kappa^2\). Thus
+\begin{align*}
+F_H(\kappa) &= \frac{A}{k^2} \int_{0}^{\kappa} J_0(t)\, t \, dt \\
+&= A \frac{a}{\kappa}J_1(ka) \\
+&= A \frac{a^2}{2} \frac{2 J_1(\kappa a)}{\kappa a}
+\end{align*}
+Note that \(\frac{2 J_1(\kappa a)}{\kappa a} = 1\) for \(\kappa a = 0\). However we are interested in the Fourier transform
+\begin{align*}
+\FTr \{A\circfn(\rho/a)\} &= F(\kappa) = 2\pi F_H(\kappa) = A\pi a^2 \frac{2J_1(\kappa a)}{\kappa a}\,.
+\end{align*}
+As a sanity check, note that this equals the volume, \(A\pi a^2\) for \(\kappa=0\) (\(k_x = k_y = 0\)).
+</div>
+</div>
+
+<div class="textbox"><h2 id="Dirac">Dirac delta functions</h2>
+<p>One definition of the Dirac delta function is
+\begin{align}\label{delta}\tag{1}
+\int_{-\infty}^{\infty} f(x) \delta (x) dx = f(0)\,.
+\end{align}
+\(\delta(x)\) is a generalized function, also called a "functional," which is something that operates on an integrand. It can be thought of as an integral mapping from \(f(x)\) to \(f(0)\).</p>
+
+<p>An alternative definition is two-fold:
+\begin{align}
+\delta(x)&=0,\quad x\neq 0\tag{2} \label{delta2}\\
+\int_{-\infty}^{\infty} \delta(x) dx &= 1\,.\tag{3} \label{delta3}
+\end{align}
+</p>
+
+<p>It will be of interest to represent a \(\delta\) function as a limit of an ordinary function \(\mu(x,\epsilon)\). 
+\begin{align*}
+\delta(x) = \lim_{\epsilon\to 0} \mu(x,\epsilon)\,.
+\end{align*}
+To construct \(\mu(x,\epsilon)\), start with another function without an \(\epsilon\), \(\zeta(x)\), having unit area
+\begin{align*}
+\int_{-\infty}^{\infty} \zeta(x) dx = 1\,.
+\end{align*}
+Then let 
+\begin{align*}
+\mu(x,\epsilon) &= \frac{1}{\epsilon} \zeta(x/\epsilon)
+\end{align*}
+Let us prove that
+\begin{align*}
+\delta(x) = \lim_{\epsilon\to 0} \mu(x,\epsilon)
+\end{align*}
+for an arbitrary \(\mu(x,\epsilon)\). Substituting \(\mu(x,\epsilon) = \frac{1}{\epsilon} \zeta(x/\epsilon)\) into the definition of the delta function given by Eq. \eqref{delta} gives
+\begin{align*}
+ f(0) &= \int_{-\infty}^{\infty} f(x) \lim_{\epsilon\to 0} \mu(x,\epsilon) dx\\
+&= \lim_{\epsilon\to 0}\int_{-\infty}^{\infty} f(x) \frac{1}{\epsilon} \zeta(x/\epsilon) dx\,.
+\end{align*}
+Now introduce a variable substitution \(x= \epsilon y\). Thus \(dx = \epsilon\, dy\). The limits remain <span class="Q">unchanged (though there is a subtle point here)</span>:
+\begin{align*}
+ f(0) &= \lim_{\epsilon\to 0}\int_{-\infty}^{\infty} f(\epsilon y) \frac{1}{\epsilon} \zeta(y) \epsilon dy\\
+&= f(0)\int_{-\infty}^{\infty} \zeta(y) dy 
+\end{align*}
+But since \(\int_{-\infty}^{\infty} \zeta(x) dx = 1\), the above is simply equal to \(f(0)\). Thus Eq. \eqref{delta} is satisfied. </p>
+
+
+<div class="example"><h3>Example: construct delta function out of rectangle function</h3>
+It is desired to construct a delta function out of 
+\begin{align*}
+\zeta(x) = \rect(x)\,.
+\end{align*}
+Following the recipe above, identify \(\mu(x,\epsilon) = \frac{1}{\epsilon} \rect (x/\epsilon)\), and thus identify the delta function to be
+\begin{align*}
+\delta(x) = \lim_{\epsilon \to 0} \frac{1}{\epsilon}\rect(x/\epsilon)\,.
+\end{align*}
+</div>
+
+<div class="example"><h3>Example: construct delta function out of \(\sinc\) function </h3>
+Now it is desired to construct a delta function out of a \(\sinc\) function, which has the form \(\sin(x)/x\). Note that
+\begin{align*}
+\int_{-\infty}^{\infty} \frac{\sin x}{x} dx = \pi\,.
+\end{align*}
+Since it is desired for \(\zeta\) to come out to \(1\) when integrated over \(x\) from \(-\infty\) to \(+\infty\), we let \(\zeta (x) = \sin(x)/(\pi x)\). Then
+\begin{align*}
+\mu(x,\epsilon) &= \frac{1}{\epsilon} \frac{\sin(x/\epsilon)}{\pi x/\epsilon}\\
+&= \frac{\sin(x/\epsilon)}{\pi x}\,.
+\end{align*}
+Thus the delta function is
+\begin{align*}
+\delta(x) = \lim_{\epsilon \to 0}\frac{\sin(x/\epsilon)}{\pi x}\,.
+\end{align*}
+To verify this, we can insert our delta function into definition and evaluate the integral (letting \(x = \epsilon y\)):
+\begin{align*}
+\lim_{\epsilon \to 0} \int_{-\infty}^{\infty} f(x) \frac{\sin(x/\epsilon)}{\pi x} dx &= \lim_{\epsilon \to 0} \int_{-\infty}^{\infty} f(\epsilon y) \frac{\sin(y)}{\pi \epsilon y} \epsilon\, dy \\
+&= f(0) \frac{1}{\pi} \int_{-\infty}^{\infty} \frac{\sin(y)}{y}  dy = f(0)\,. 
+\end{align*}
+It is found that the delta function based on \(\sinc\) indeed satisfies the definition of the delta function. 
+</div>
+
+<p>Using the result of the previous example, the Fourier transform of the complex exponential can be taken rather cleverly. Start with the previous result, \(\delta(x) = \lim_{\epsilon\to 0}\frac{\sin(x/\epsilon)}{\pi x}\), write sine using complex exponentials (e.g., \(\sin a  = (e^{ia}-e^{-ia})/2i\)), cleverly write \(e^{ix/\epsilon} - e^{-ix/\epsilon} = \int_{-1/\epsilon}^{1/\epsilon} ix e^{ik_xx}dk_x\), and take the limit:
+\begin{align*}
+\delta(x) &= \lim_{\epsilon\to 0}\frac{\sin(x/\epsilon)}{\pi x}\\
+&= \lim_{\epsilon\to 0} \frac{1}{i2\pi x}(e^{ix/\epsilon} - e^{-ix/\epsilon})\\
+&= \lim_{\epsilon\to 0} \frac{1}{i2\pi x} \int_{-1/\epsilon}^{1/\epsilon} ix e^{ik_xx}dk_x \\
+&= \frac{1}{2\pi} \int_{-\infty}^{\infty} e^{ik_xx}dk_x
+\end{align*}
+Thus 
+\begin{align*}
+\int_{-\infty}^{\infty} e^{ik_xx}dk_x &= 2\pi \delta(x)\,.
+\end{align*}
+(Alternatively, we have \(\int_{-\infty}^{\infty} e^{-ik_xx}dk_x = 2\pi \delta(x)\).) And for the dual space,
+\begin{align*}
+\int_{-\infty}^{\infty} e^{-ik_xx}dx &= 2\pi \delta(k_x)\,.
+\end{align*}
+</p>
+
+<div class="example"><h3>Example: Fourier integral theorem</h3>
+Using the above result, the Fourier integral theorem, i.e., the Fourier transform of the inverse Fourier transform of a function gives the function itself, is now proven:
+\begin{align*}
+\IFTx \{\FTx [f(x)] &= \IFTx \{F(k_x)\}\}\\
+&= \frac{1}{2\pi} \int_{-\infty}^{\infty} \bigg[ \int_{-\infty}^{\infty} f(x') e^{-ik_xx'} dx' \bigg] e^{ik_xx}dk_x\\
+&= \frac{1}{2\pi} \int_{-\infty}^{\infty} f(x') \bigg[\int_{-\infty}^{\infty} e^{-ik_x(x-x')} \,dk_x \bigg] dx'\\
+&= \frac{1}{2\pi} \int_{-\infty}^{\infty} f(x') 2\pi  \delta(x-x') dx'  \\
+&= f(x)\,.
+\end{align*}
+Thus \(\IFTx \{\FTx [f(x)]\} = f(x)\).
+</div>
+</div>
 
 <!--<div class="wrong"><h2 id="4">1-4</h2>
 I, humble bat.   
