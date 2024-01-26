@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Fourier acoustics and angular spectra</title>
+  <title>Mathematical preliminary</title>
  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async
           src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
@@ -161,7 +161,7 @@ window.MathJax = {
 </nav>
 
 <div class="textbox">
-<h1 id="top">Fourier acoustics and angular spectra</h1>
+<h1 id="top">Mathematical preliminary</h1>
 
 <p>
   <i>Contents:</i>
@@ -668,6 +668,52 @@ Using the above result, the Fourier integral theorem, i.e., the Fourier transfor
 \end{align*}
 Thus \(\IFTx \{\FTx [f(x)]\} = f(x)\).
 </div>
+
+<p>A few properties of the delta function are now discussed: </p>
+
+<h3>Derivative property</h3>
+<p> 
+Denoting \(\delta'(x) = {d\delta}/{dx}\), a property involving the derivative of the delta function can be derived by integration by parts:
+\begin{align*}
+\int_{-\infty}^{\infty} f(x)\delta'(x) dx = \int_{-\infty}^{\infty}f(x)\delta(x) - \int_{-\infty}^{\infty} f'(x)\delta(x) dx = -f'(0)
+\end{align*}
+In general, then,
+\begin{align*}
+\int_{-\infty}^{\infty} f(x) \delta^{(n)}(x) = (-1)^n f^{(n)}(0)
+\end{align*}</p>
+<h3>Normal mode expansion of the delta function</h3>
+Let 
+\begin{align*}
+\{\phi_n(x)\} = \text{ complete orthogonal set}
+\end{align*}
+so
+\begin{align*}
+\int \phi_n(x)\phi_m(x)dx = \delta_{mn}
+\end{align*}
+We can expand any function \(f(x)\) in terms of a complete orthogonal set, viz., \(f(x) = \sum_n a_n \phi_n(x)\). Let \(f(x) = \delta(x-x_0)\):
+\begin{align}\label{expansion}\tag{4}
+\delta(x-x_0) = \sum_n a_n \phi_n(x)\,.
+\end{align}
+Multiply by \(\phi_m\) and take integral of both sides:
+\begin{align*}
+\int_{-\infty}^{\infty}\delta(x-x_0)\phi_m(x) dx &= \sum_n \int_{-\infty}^{\infty } a_n \phi_n(x) \phi_m(x) dx\\
+&= \sum_n a_n \delta_{nm} =a_m
+\end{align*}
+Using the sifting property on the left-hand side, the expansion coefficients are \(a_n = \phi_n(x_0)\). Thus Eq. \eqref{expansion} becomes
+\begin{align*}
+\delta(x-x_0) &= \sum_{n} \phi_n(x) \phi_n(x_0)\,.
+\end{align*}
+<div class="example"><h3>Example: normal modes on fixed-fixed string</h3>
+The modes of a string are given by 
+\begin{align*}
+\phi_n(x) &= \sqrt{\frac{2}{L}} \sin (n\pi x/L)\,, \quad \text{where}\quad \int_{0}^{L} \phi^2 dx = 1
+\end{align*}
+Since \(\delta(x-x_0) = \sum_{n} \phi_n(x) \phi_n(x_0)\), the delta function in this case is 
+\begin{align*}
+\delta(x-x_0) &= \frac{2}{L}\sum_{n} \sin(n\pi x/L) \sin(m\pi x/L)\,.
+\end{align*}
+</div>
+Note that the dimensions of a delta function are always the inverse of the differential element. More properties of the delta function are available <a href="delta.pdf" target="_blank" rel="noopener noreferrer">here</a>.
 </div>
 
 <!--<div class="wrong"><h2 id="4">1-4</h2>
