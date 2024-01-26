@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fourier acoustics</title>
+ <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+   </script>
+<script>
+window.MathJax = {
+  tex: {
+    tags: 'ams'
+  }
+};
+</script>
+<script type="text/javascript">
+window.MathJax = {
+  tex: {
+    macros: {
+      Order: "{\\mathcal O}",
+      vec: ['\\boldsymbol{#1}',1] ,
+      div: "{\\boldsymbol{\\nabla}\\cdot}",
+      grad: "{\\boldsymbol\\nabla}",
+      curl: "{\\boldsymbol\\nabla\\times}",
+      Laplacian: "{\\nabla^2}",
+      dAlambertian: "{\\Box^2}",
+      Order: "{\\mathcal O}",
+      T: "{^\\mathsf{T}}",
+      FTt: "{\\mathcal{F}_t}",
+      IFTt: "{\\mathcal{F}_t^{-1}}",
+      FTx: "{\\mathcal{F}_x}",
+      IFTx: "{\\mathcal{F}_x^{-1}}",      
+      FTr: "{\\mathcal{F}_\\rho}",
+      IFTr: "{\\mathcal{F}_\\rho^{-1}}",    
+      HT: "{\\mathcal{H}_\\rho}",
+      IHT: "{\\mathcal{H}_\\rho^{-1}}",  
+      FTxy: "{\\mathcal{F}_{xy}}",
+      IFTxy: "{\\mathcal{F}_{xy}^{-1}}",
+      rect: "{\\mathrm{\\,rect\\,}}",
+      tri: "{\\mathrm{\\,tri\\,}}",
+      circfn: "{\\mathrm{\\,circ\\,}}",
+      sinc: "{\\mathrm{\\,sinc\\,}}",
+      ex: "{\\hat{e}_x}",           
+      ey: "{\\hat{e}_y}",
+      ez: "{\\hat{e}_z}"
+    }
+  }
+};
+</script>	
+  <style>
+    body {
+      margin: 20px;
+      background:  #577abdd8; 
+      font-family: Arial, sans-serif;
+      height: 100%;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      line-height: 1.5;
+    }
+
+    .textbox {
+      background-color: rgba(241, 241, 241, 0.986);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .example {
+      background-color: rgba(197, 197, 197, 0.836);
+      border-radius: 3px;
+      padding-top: 1px;
+      padding-bottom: 10px;
+      padding-right: 20px;
+      padding-left: 20px;
+      margin-bottom: 20px;
+      border-style: solid;
+      border-width: thin;
+      border-color: #9b9b9b94;
+    }
+
+    .wrong {
+      background-color: rgba(255, 205, 205, 0.856);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    nav {
+      background-color: #0000003d;
+      margin-bottom: 20px;
+    }
+
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+    }
+
+    nav ul li {
+      flex: 1;
+    }
+
+    nav ul li a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      text-align: center;
+      padding: 3px;
+    }
+
+    nav ul li a:hover {
+      background-color: #03030365;
+    }
+
+    .Q {
+      color:  #9e0702;
+      font-style: italic;
+    }
+
+    .floating-table-of-contents {
+            position: fixed;
+            top: 100%;
+            right: 15pt;
+            transform: translateY(-50%);
+            background-color:  rgba(255, 255, 255, 0);
+            padding: 3px;
+            border-radius: 6px;
+        }
+
+        .toc-link {
+            display: block;
+            margin-bottom: 20px;
+            color: #577bbd59; 
+            text-decoration: none;
+            font-size:8pt;
+        }
+  </style>
+
+</head>
+<body>
+  <nav>
+    <ul>
+	 <li><a href="index.html"> &#127968;</a></li>
+      <li><a href="1.html">1</a></li>
+      <li><a href="2.html">2</a></li>
+      <li><a href="3.html">3</a></li>
+      <li><a href="4.html">4</a></li>
+      <li><a href="5.html">5</a></li>
+      <li><a href="6.html">6</a></li>
+      <li><a href="7.html">7</a></li>
+    </ul>
+  </nav>
+
+<nav class="floating-table-of-contents">
+<a href="#top" class="toc-link">Back to top</a>
+</nav>
+
+<div class="textbox">
+<h1 id="top">Fourier acoustics</h1>
+<p>
+  <i>Contents:</i>
+<ul>
+<li><a href="#pressuresource">Pressure source</a></li>
+<li><a href="#velocitysource">Velocity source</a></li>
+</ul>	
+Difficult topics are coloured red, and my personal comments/questions are in <span class="Q">italicized red</span>. </p>
+<p>The first two sections on pressure and velocity source are also covered <a href="https://cag170030.github.io/chirag/fourier_acoustics_notes.pdf" target="_blank" rel="noopener noreferrer">here</a>. The treatment is basically the same, though those notes are slightly more succinctly. (Note that \(\texttt{\hat}\)s are used instead of capital letters for Fourier-transformed quantities in those notes.) </p>
+</div>
+
+<div class="textbox"><h2 id="pressuresource">Pressure source</h2>
+<p>Begin with the Helmholtz equation
+\begin{align}\label{Helmster}\tag{1}
+\Laplacian p + k^2 p = 0\,.
+\end{align}
+Given field in the source plane \(p_\omega(x,y,0)\), find \(p_\omega(x,y,z>0)\). Start by taking the 2D spatial Fourier transform of Eq. \eqref{Helmster}:
+\begin{align*}
+\FTxy \bigg\{\bigg(\frac{\partial^2}{\partial x^2} + \frac{\partial^2}{\partial y^2} + \frac{\partial^2}{\partial z^2}\bigg) p_\omega + k^2 p_\omega\bigg\} %= \frac{d^2 P}{dz^2} + (k^2-k_x^2-k_y^2) = 0\,.
+\end{align*}
+Using the derivative property and calling \(P= P(k_x,k_y,z)\), the above becomes
+\begin{align*}
+\frac{d^2 P}{dz^2} + k_z^2 P = 0\,,\quad k_z = \sqrt{k^2 - k_x^2 -k_y^2}\,.
+\end{align*}
+For forward propagation, the above 2nd order ODE reads
+\begin{align*}
+P(k_x,k_y,z) = P(k_x,k_y,0) e^{ik_zz}\,.
+\end{align*}
+To return to physical space, the inverse 2D spatial Fourier transform is taken: 
+\begin{align*}
+p_\omega(x,y,z) %&= \frac{1}{4\pi^2}\iint_{-\infty}^\infty P(k_x,k_y,z) e^{i(k_xx +k_yy)} dk_x\, dk_y\\
+%&= \frac{1}{4\pi^2} \iint_{-\infty}^\infty P(k_x,k_y,0) e^{i(k_xx + k_yy + k_zz)} dk_x\, dk_y\\
+&= \IFTxy \{P(k_x,k_y,0)e^{ik_zz}\}\,.
+\end{align*}
+Since \(P(k_x,k_y,0) = \FTxy\{p(k_x,k_y,0)\}\), the entire field can be written in terms of the source condition: 
+\begin{align}\label{presssource}\tag{2}
+p_\omega(x,y,z) = \IFTxy \{\FTxy\{p(k_x,k_y,0)\}e^{ik_zz}\}\,,
+\end{align}
+where the \(z\) component of the wavenumber is 
+\begin{align*}
+k_z &= \sqrt{k^2-k_x^2-k_y^2}\\
+&=\begin{cases}
+ \text{ positive real}\,\quad & k_x^2 + k_y^2 < k^2 \\
+  \text{ positive imaginary}\, \quad &k_x^2 + k_y^2 > k^2 \,.
+\end{cases}
+\end{align*}
+Note that the <i>entire</i> angular spectrum (all \(k_x,k_y\)) is required to reproduce the exact field.
+</p>
+
+<p>For axisymmetric sources, Eq. \eqref{presssource} becomes
+\begin{align*}
+p_\omega (r,z) = \IHT \{\HT \{p_\omega(\rho,0)\} e^{ik_zz}\} \\
+k_z = \sqrt{k^2 - \kappa^2}\, \kappa^2 = k_x^2 +k_y^2\,.
+\end{align*}</p>
+</div>
+
+<div class="textbox"><h2 id="velocitysource">Velocity source</h2>
+<p> For a velocity source (which is more practical), we should recall the linearized Newton's law:
+\begin{align*}
+\rho_0 \frac{\partial \vec{u}}{\partial t} + \grad p = 0\,,
+\end{align*}
+or for time-harmonic waves, \(-i\omega\rho_0 \vec{u}_\omega + \grad p_\omega = 0\). Solving for \(\vec{u}\) gives
+\begin{equation*}
+\vec{u}_\omega = \frac{\grad p_\omega}{ik\rho_0c_0}\,.
+\end{equation*}
+The 2D spatial Fourier transform of the left-hand side of the above is simply
+\begin{align*}
+\FTxy \{\vec{u}_\omega (x,y,z)\} = \vec{U}(k_x,k_y,z).
+\end{align*}
+Meanwhile, for the right-hand side, note that by the <a href="1.html#transform_theorems" target="_blank" rel="noopener noreferrer">derivative property of the Fourier transform</a>,
+\begin{align*}
+\FTxy\{\grad p_\omega(x,y,z)\} &= \FTxy\bigg\{\bigg(\ex \frac{\partial}{\partial x} + \ey \frac{\partial}{\partial y} + \ez \frac{\partial }{\partial z}\bigg)p_\omega\bigg\}\\
+&= i(k_x \ex + k_y \ey)P(k_x,k_y,z)  +\ez \FTxy\bigg\{\frac{\partial p_\omega}{\partial z}\bigg\}\,.
+\end{align*}
+But since \(P(k_x,k_y,z) = P(k_x,k_y,0) e^{ik_zz}\), the last term of the above, \(\FTxy\{\partial p_\omega/\partial z\}\), is
+\begin{align*}
+\FTxy\bigg\{\frac{\partial p_\omega}{\partial z} \bigg\} &= \FTxy \bigg\{\frac{\partial}{\partial z}\IFTxy [P(k_x,k_y,0) e^{ik_zz}] \bigg\}\\
+&= \FTxy \{\IFTxy ik_z [P(k_x,k_y,0) e^{ik_zz}] \}\\
+&= ik_z P(k_x,k_y,0) e^{ik_zz}\\
+&= ik_z P(k_x,k_y,z)\,.
+\end{align*}
+So 
+\begin{align*}
+\FTxy\{ \grad p_\omega(x,y,z)\} &= i(k_x \ex + k_y \ey)P(k_x,k_y,z)  + ik_z P(k_x,k_y,z) \\
+&=i\vec{k} P(k_x,k_y,z)\,.
+\end{align*}
+where
+\begin{align*}
+\vec{k} &= k_x\ex + k_y\ey + (k^2 - k_x^2 - k_y^2)^{1/2}\ez = \vec{k} (k_x,k_y)\,.
+\end{align*}
+Since \(\vec{u}_\omega = \frac{\grad p_\omega}{ik\rho_0c_0}\), its 2D spatial Fourier transform is
+\begin{align}\label{U}\tag{3}
+\vec{U}(k_x,k_y,z) &= \frac{1}{\rho_0c_0} \frac{\vec{k}}{k} P(k_x,k_y,z)\,
+\end{align}
+Assuming that \(\vec{u}_\omega (x,y,0) = u_0(x,y)\ez\), Eq. \eqref{U} evaluated in the source plane \(z=0\) is
+\begin{align*}
+\vec{U}_0(k_x,k_y) &= \FTxy \{u_0(x,y)\} \ez = U_0 (k_x,k_y)\ez\\
+&= \frac{1}{\rho_0c_0} \frac{k_z \ez}{k} P_0(k_x,k_y)
+\end{align*}
+Solving for the 2D spatial Fourier transform of the source pressure gives
+\[P_0(k_x,k_y) = \rho_0 c_0 \frac{k}{k_z} U(k_x,k_y)\,.\]
+So the full field is given by
+\begin{align*}
+p_\omega (x,y,z) &= \rho_0c_0\IFTxy \{U_0(k_x,k_y)\frac{k}{k_z} e^{-ikz}\}\,,
+\end{align*}
+where \(P_0(k_x,k_y) = \FTxy\{p_0(x,y)\}\). Note that there is a singularity at \(k_z = 0\), corresponding to the perimeter of the radiation circle.</p>
+</div>
+
+<!--<div class="wrong"><h2 id="4">1-4</h2>
+I, humble bat.   
+</div>-->
+
+</div>
+</body>
+</html>
