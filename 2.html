@@ -167,6 +167,8 @@ window.MathJax = {
 <ul>
 <li><a href="#pressuresource">Pressure source</a></li>
 <li><a href="#velocitysource">Velocity source</a></li>
+<li><a href="#intensity">Intensity</a></li>
+<li><a href="#code">Code</a></li>
 </ul>	
 Difficult topics are coloured red, and my personal comments/questions are in <span class="Q">italicized red</span>. </p>
 <p>The first two sections on pressure and velocity source are also covered <a href="https://cag170030.github.io/chirag/fourier_acoustics_notes.pdf" target="_blank" rel="noopener noreferrer">here</a>. The treatment is basically the same, though those notes are slightly more succinctly. (Note that \(\texttt{\hat}\)s are used instead of capital letters for Fourier-transformed quantities in those notes.) </p>
@@ -267,6 +269,26 @@ So the full field is given by
 p_\omega (x,y,z) &= \rho_0c_0\IFTxy \{U_0(k_x,k_y)\frac{k}{k_z} e^{-ikz}\}\,,
 \end{align*}
 where \(P_0(k_x,k_y) = \FTxy\{p_0(x,y)\}\). Note that there is a singularity at \(k_z = 0\), corresponding to the perimeter of the radiation circle.</p>
+</div>
+
+<div class="textbox"><h2 id="intensity">Intensity</h2>
+How does one calculate intensity using Fourier acoustics? <a href="https://cag170030.github.io/chirag/intensity_calculation.pdf" target="_blank" rel="noopener noreferrer">Recall that</a> 
+\begin{align*}
+\vec{I} &= \langle p\vec{u}\rangle\\
+&= \langle \Re \{p_\omega e^{-i\omega t}\} \Re \{\vec{u}_\omega e^{-i\omega t}\}\rangle\\
+&= \frac{1}{2} \Re \{p_\omega^* \vec{u}_\omega\} = \frac{1}{2} \Re \{p_\omega \vec{u}_\omega^*\}\,,
+\end{align*}
+where 
+\begin{align*}
+p_\omega (x,y,z) &= \IFTxy\{P(k_x,k_y,z)\}\\
+\text{and}\quad \vec{u}_\omega (x,y,z) &= \IFTxy\{\vec{U}(k_x,k_y,z)\}=\IFTxy\{U_x\hat{e}_x + U_y\hat{e}_y + U_z\hat{e}_z\}\,.
+\end{align*} 
+</div>
+
+<div class="textbox"><h2 id="code"><a href="FourierAcoustProp2024.m" target="_blank" rel="noopener noreferrer">Code</a></h2>
+<p>The whole code is nondimensionalized. The \(z\) axis is nondimensionalized by \(z_0\), the Rayleigh distance, sometimes called the "collumnation distance" or "diffraction length" \(ka^2/2 \sim S/\lambda\) (surface area to wavelength). The transverse axis is nondimensionalized by the source radius \(a\) (\(R = r/a\)), as is the wavenumber (\(K = ka\)). The code is set up to handle a velocity source, but it can easily be modified to handle pressure sources by implementing the discussion above.</p>
+
+<p>The code itself contains all of these definitions. <a href="Fourier_comments.pdf" target="_blank" rel="noopener noreferrer">This sheet</a> contains a full explanation and discussion of the code. </p> 
 </div>
 
 <!--<div class="wrong"><h2 id="4">1-4</h2>
