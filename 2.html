@@ -19,9 +19,9 @@ window.MathJax = {
     macros: {
       Order: "{\\mathcal O}",
       vec: ['\\boldsymbol{#1}',1] ,
-      div: "{\\boldsymbol{\\nabla}\\cdot}",
+      divergence: "{\\boldsymbol{\\nabla}\\cdot\\,}",
       grad: "{\\boldsymbol\\nabla}",
-      curl: "{\\boldsymbol\\nabla\\times}",
+      curl: "{\\boldsymbol\\nabla\\times\\,}",
       Laplacian: "{\\nabla^2}",
       dAlambertian: "{\\Box^2}",
       Order: "{\\mathcal O}",
@@ -42,7 +42,8 @@ window.MathJax = {
       sinc: "{\\mathrm{\\,sinc\\,}}",
       ex: "{\\hat{e}_x}",           
       ey: "{\\hat{e}_y}",
-      ez: "{\\hat{e}_z}"
+      ez: "{\\hat{e}_z}",
+      ephi: "{\\hat{e}_\\phi}"
     }
   }
 };
@@ -135,7 +136,7 @@ window.MathJax = {
         .toc-link {
             display: block;
             margin-bottom: 20px;
-            color: #577bbd59; 
+            color: #091c4165; 
             text-decoration: none;
             font-size:8pt;
         }
@@ -169,6 +170,8 @@ window.MathJax = {
 <li><a href="#velocitysource">Velocity source</a></li>
 <li><a href="#intensity">Intensity</a></li>
 <li><a href="#code">Code</a></li>
+<li><a href="#plate">Radiation from plate due to a 1D bending wave</a></li>
+<li><a href="#elastic">Generalization to elastic waves in isotropic solids</a></li>
 </ul>	
 Difficult topics are coloured red, and my personal comments/questions are in <span class="Q">italicized red</span>. </p>
 <p>The first two sections on pressure and velocity source are also covered <a href="https://cag170030.github.io/chirag/fourier_acoustics_notes.pdf" target="_blank" rel="noopener noreferrer">here</a>. The treatment is basically the same, though those notes are slightly more succinctly. (Note that \(\texttt{\hat}\)s are used instead of capital letters for Fourier-transformed quantities in those notes.) </p>
@@ -291,6 +294,152 @@ p_\omega (x,y,z) &= \IFTxy\{P(k_x,k_y,z)\}\\
 <p>The code itself contains all of these definitions. <a href="Fourier_comments.pdf" target="_blank" rel="noopener noreferrer">This sheet</a> contains a full explanation and discussion of the code. </p> 
 </div>
 
+
+<div class="textbox"><h2 id="plate">Radiation from plate due to 1D bending wave</h2>
+<p>
+The bending wave has the form 
+\begin{align*}
+\vec{u}(x,y,0,t) &= u_0 e^{i(k_bx-\omega t)} \ez\, \quad k_b = \omega/c_b\\
+&= u_0(x) e^{-i\omega t}
+\end{align*}
+where the normal particle velocity on the surface is
+\begin{align*}
+u_0(x) = u_0 e^{ik_b}\,.
+\end{align*}
+<p align="middle"> <img src="platewave.svg" width="225" height="auto"></p>
+To calculate the field in the fluid medium, first take the 2D spatial Fourier transform of the source condition,
+\begin{align*}
+U_0(k_x,k_y) &= \FTxy\{u_0(x)\} \\
+&= u_0 \iint_{-\infty}^\infty e^{-i(k_x-k_b)x -ik_yy} dx\, dy\\
+&= 4\pi^2 u_0 \delta(k_x-k_b)\delta(k_y)\,.
+\end{align*}
+Now convert to a pressure source using the result from the <a href="#velocitysource">section on velocity sources</a>.
+\begin{align*}
+P(k_x,k_y) &= \rho_0c_0 \frac{k}{k_z} U_0(k_x,k_y)\\
+&= 4\pi^2 \rho_0c_0 u_0 \frac{k}{k_z} \delta(k_x-k_b)\delta(k_y)\,.
+\end{align*}
+The pressure field is found by the standard Fourier acoustics procedure:
+\begin{align*}
+p_\omega(x,y,z) &= \IFTxy \{P_0(k_x,k_y) e^{ik_zz}\}\\
+&= 4\pi^2 \rho_0c_0 u_0 k \, \IFTxy \{\delta(k_x-k_b) \delta(k_y) {e^{ik_zz}}/{k_z}\}\\
+&= \rho_0c_0 u_0 k \iint_{-\infty}^\infty \delta(k_x-k_b)\delta(k_y) \frac{e^{i(k^2-k_x^2 -k_y^2)^{1/2}}}{\sqrt{k^2-k_x^2-k_y^2}} e^{ik_xx + ik_yy} dk_xdk_y\\
+&= \frac{\rho_0c_0 u_0 k}{\sqrt{k^2-k_b^2}} e^{ik_bx + i(k^2-k_b^2)^{1/2}z}\,.
+\end{align*}
+If \(k > k_b\) (or \(c_b > c_0\)), then the wave propagates into the fluid, while if \(k < k_b\) (or \(c_b < c_0\)), then the wave is evanescent in the fluid.   </p>
+
+<p>
+For additional insight, convert pressure to the particle velocity:
+\begin{align*}
+\vec{u}_\omega (x,y,z) &= \grad p_\omega/ik\rho_0c_0\\
+&= u_0 \frac{k_b\ex }{\sqrt{k^2-k_b^2}} e^{ik_bx + i\sqrt{k^2 - k_b^2}z}\,.
+\end{align*}
+The intensity can then be calculated:
+\begin{align*}
+\vec{I} &= \frac{1}{2}\Re \{p_\omega \vec{u}_\omega^*\}\\
+&= \frac{\rho_0c_0u_0^2}{2(1-k_b^2/k^2)} \bigg[\frac{k_b}{k} \ex + \sqrt{1-k_b^2/k^2}\ez\bigg]\,\quad k_b \,{<}\, k\\
+&= \frac{\rho_0c_0u_0^2}{2(1-k_b^2/k^2)} \frac{k}{k_b} e^{-2(k_b^2 - k^2)^{1/2}z} \quad k_b>k\,.
+\end{align*}
+In the second case, there is no power radiated in the \(z\) direction.</p>
+
+<p> As a sanity check, what if \(c_b \to \infty\)? Then one should obtain a plane wave in the \(z\) direction. Indeed, for \(k_b\to 0\), 
+\begin{align*}
+p_\omega(x,y,z) &= \rho_0c_0 u_0 e^{ikz}\,.
+\end{align*}
+</p>
+</div>
+
+<div class="textbox"><h2 id="elastic"> Generalization to elastic waves in isotropic solids</h2>
+
+Let \(\vec{\xi}\) be the particle displacement. It can be separated into a irrotational and rotational components,
+\begin{align*}
+\vec{\xi} = \vec{\xi}_l + \vec{\xi}_t\,,
+\end{align*}
+where \(\vec{\xi}_l\) is the longitudinal (compressional) wave displacement (\(\curl \vec{\xi}_l = 0\)), and where \(\vec{\xi}_t\) is the shear (transverse) wave displacement (\(\divergence \vec{\xi}_t = 0\)). These two displacements above satisfy wave equations of their own. <span class="Q"> This was shown without proof, but the derivation is worked out from first principles <a href="https://cag170030.github.io/quals/ultrasonics.html#EWE" target="_blank" rel="noopener noreferrer">here</a>.</span> 
+
+<h3>Compressional waves</h3>
+The compressional wave equation is
+\begin{align*}
+\Laplacian \vec{\xi}_l &= \frac{1}{c_l^2} \frac{\partial \vec{\xi}_l}{\partial t^2}
+\end{align*}
+where the longitudinal sound speed is
+\begin{align*}
+c_l &= \sqrt{\frac{K + 4\mu/3}{\rho}}\,,
+\end{align*}
+where \(K\) is the bulk modulus and \(\mu\) is the shear modulus. By the Helmholtz decomposition theorem, \(\vec{\xi}_\ell\) is defined as the gradient of a scalar potential \(\phi\),
+\begin{align*}
+\vec{\xi}_l = \grad \phi\,,
+\end{align*}
+giving
+\begin{align*}
+\Laplacian \phi = \frac{1}{c_l} \frac{\partial^2\phi}{\partial t^2}\,.
+\end{align*}
+Assuming \(\phi\) is time harmonic results in the Helmholtz equation, which is the same as for waves in fluids:
+\begin{align*}
+\Laplacian \phi + k^2\phi = 0\,.
+\end{align*}
+Thus we can swap out \(p\) for \(\phi\) in Fourier theory presented earlier, and one can obtain the full compressional wave field:
+\begin{align*}
+\phi_\omega(x,y,z) &= \IFTxy \{\FTxy[\phi_\omega(x,y,0)] e^{ik_zz}\}\,.
+\end{align*}
+
+<h3>Shear waves </h3>
+The wave equation for shear waves is vectorial, i.e.,
+\begin{align}\label{vectorwave}\tag{1}
+\Laplacian \vec{\xi}_t = \frac{1}{c_t^2}\frac{\partial \vec{\xi}_t}{\partial t^2}\, \quad c_t = \sqrt{\mu/\rho}
+\end{align}
+The other condition noted above is that \(\divergence \vec{\xi}_t = 0\), which is often utilized to to defined terms of the vector potential \(\vec{\xi}_t = \curl \vec{\psi}\) (analogous to how the longitudinal displacement was defined in terms of a scalar potential above). However, even with the vector potential, we would still have three components, so let us follow Landau and Lifshitz and simply use the Cartesian components of \(\vec{\xi}_t\),
+\begin{align*}
+\vec{\xi}_t = \xi_x\ex + \xi_y\ey + \xi_z\ez\,,
+\end{align*}
+such that Eq. \eqref{vectorwave} becomes
+\begin{align}
+\Laplacian \xi_x + k_t^2 \xi_x &= 0\label{Helmers1} \tag{2}\\
+\Laplacian \xi_y + k_t^2 \xi_y &= 0 \label{Helmers2} \tag{3}\\
+\Laplacian \xi_z + k_t^2 \xi_z &= 0\,.
+\end{align}
+Note that in the equations above, only two components are independent, because the third is related by \(\divergence \vec{\xi}_t = 0\), which in Cartesian coordinates reads
+\begin{align*}
+\frac{\partial \xi_x}{\partial x} + \frac{\partial \xi_y}{\partial y} + \frac{\partial \xi_z}{\partial z} = 0\,.
+\end{align*}
+Eqs. \eqref{Helmers1} and \eqref{Helmers2} are solved separately using Fourier acoustics:
+\begin{align*}
+\xi_x(x,y,z) &= \IFTxy\{\FTxy\{\xi_x(x,y,0)\}e^{ik_zz}\,.
+\end{align*}
+
+<div class="example"><h3>Example: Axisymmetric shear waves </h3>
+<h4>Torsional waves</h4>
+In torsional waves, the transverse displacement is given by
+\begin{align*}
+\vec{\xi}_t(\rho,\phi,z=0) &= \xi_\phi (\rho) \hat{e}_\phi\,,
+\end{align*}
+where the coordinates and unit vectors are shown below:
+<p align="middle"> <img src="cylindrical_unit_vectors.svg" width="180" height="auto"></p>
+Then 
+\begin{align*}
+\xi_x &= -\xi_\phi(\rho) \sin\phi\\
+\xi_y &= \xi_\phi(\rho) \cos\phi\\
+\xi_z &= 0
+\end{align*}
+and \begin{align*}
+\divergence \vec{\psi} &= \frac{1}{\rho} \frac{\partial (\rho \xi_\rho)}{\partial \rho} + \frac{1}{\rho} \frac{\partial \xi_\phi}{\partial \phi} + \frac{\partial \xi_z}{\partial z}
+\end{align*}
+Thus \(\divergence \vec\psi = 0\). Meanwhile, the Laplacian is 
+\begin{align*}
+\Laplacian &= \frac{\partial^2}{\partial \rho^2} + \frac{1}{\rho} \frac{\partial}{\partial \rho} + \frac{1}{\rho^2}\frac{\partial^2}{\partial \phi^2} + \frac{\partial^2}{\partial z^2}\,.
+\end{align*}
+Thus \begin{align*}
+\Laplacian \xi_x
+ &= \bigg( \frac{\partial^2}{\partial \rho^2} + \frac{1}{\rho} \frac{\partial}{\partial \rho} + \frac{1}{\rho^2}\frac{\partial^2}{\partial \phi^2} + \frac{\partial^2}{\partial z^2} \bigg) (-\xi_\phi \sin\phi)\\
+\Laplacian \xi_y
+ &= \bigg( \frac{\partial^2}{\partial \rho^2} + \frac{1}{\rho} \frac{\partial}{\partial \rho} + \frac{1}{\rho^2}\frac{\partial^2}{\partial \phi^2} + \frac{\partial^2}{\partial z^2} \bigg) (\xi_\phi \cos\phi)
+\end{align*}
+Both Eqs. \eqref{Helmers1} and \eqref{Helmers2} yield
+\begin{align*}
+\bigg( \frac{\partial^2}{\partial \rho^2} + \frac{1}{\rho} \frac{\partial}{\partial \rho} + \frac{1}{\rho^2}\frac{\partial^2}{\partial \phi^2} \bigg) (\xi_\phi \cos\phi)
+\end{align*}
+</div>
+	
+</div>
 <!--<div class="wrong"><h2 id="4">1-4</h2>
 I, humble bat.   
 </div>-->
