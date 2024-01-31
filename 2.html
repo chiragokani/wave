@@ -421,24 +421,24 @@ Then
 \xi_z &= 0
 \end{align*}
 and \begin{align*}
-\divergence \vec{\psi} &= \frac{1}{\rho} \frac{\partial (\rho \xi_\rho)}{\partial \rho} + \frac{1}{\rho} \frac{\partial \xi_\phi}{\partial \phi} + \frac{\partial \xi_z}{\partial z}
+\divergence \vec{\xi}_t &= \frac{1}{\rho} \frac{\partial (\rho \xi_\rho)}{\partial \rho} + \frac{1}{\rho} \frac{\partial \xi_\phi}{\partial \phi} + \frac{\partial \xi_z}{\partial z}
 \end{align*}
-Thus \(\divergence \vec\psi = 0\). Meanwhile, the Laplacian is 
+Since \(\vec{\xi}_t(\rho,\phi,z=0) = \xi_\phi (\rho) \hat{e}_\phi\), the above equation reduces to \(\divergence \vec\psi = 0\). Meanwhile, the Laplacian in cylindrical coordinates is 
 \begin{align*}
 \Laplacian &= \frac{\partial^2}{\partial \rho^2} + \frac{1}{\rho} \frac{\partial}{\partial \rho} + \frac{1}{\rho^2}\frac{\partial^2}{\partial \phi^2} + \frac{\partial^2}{\partial z^2}\,.
 \end{align*}
-Thus \begin{align*}
+Thus the Laplacian of the wave variable in Eqs. \eqref{Helmers1} and \eqref{Helmers2} read
+\begin{align*}
 \Laplacian \xi_x
  &= \bigg( \frac{\partial^2}{\partial \rho^2} + \frac{1}{\rho} \frac{\partial}{\partial \rho} + \frac{1}{\rho^2}\frac{\partial^2}{\partial \phi^2} + \frac{\partial^2}{\partial z^2} \bigg) (-\xi_\phi \sin\phi)\\
 \Laplacian \xi_y
- &= \bigg( \frac{\partial^2}{\partial \rho^2} + \frac{1}{\rho} \frac{\partial}{\partial \rho} + \frac{1}{\rho^2}\frac{\partial^2}{\partial \phi^2} + \frac{\partial^2}{\partial z^2} \bigg) (\xi_\phi \cos\phi)
+ &= \bigg( \frac{\partial^2}{\partial \rho^2} + \frac{1}{\rho} \frac{\partial}{\partial \rho} + \frac{1}{\rho^2}\frac{\partial^2}{\partial \phi^2} + \frac{\partial^2}{\partial z^2} \bigg) (\xi_\phi \cos\phi)\,,
 \end{align*}
-Both Eqs. \eqref{Helmers1} and \eqref{Helmers2} yield
+and both Eqs. \eqref{Helmers1} and \eqref{Helmers2} yield
 \begin{align*}
 \bigg( \frac{\partial^2}{\partial \rho^2} + \frac{1}{\rho} \frac{\partial}{\partial \rho} + \frac{1}{\rho^2}\frac{\partial^2}{\partial \phi^2} \bigg) (\xi_\phi \cos\phi)
 \end{align*}
 </div>
-	
 </div>
 <!--<div class="wrong"><h2 id="4">1-4</h2>
 I, humble bat.   
