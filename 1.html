@@ -347,7 +347,7 @@ To eliminate the conditional statement above, simply consider the magnitude of \
 &= \frac{1}{|a|}\int_{-\infty}^{\infty} f(u) e^{-ik_xu/a}\,du\,.
 \end{align*}
 Recalling Eq. \eqref{F}, \(F(k_x) = \mathcal{F}_x \{f(x)\} = \int_{-\infty}^{\infty} f(x)e^{-i k_x x }dx\), the integral above is identified as \(F(k_x/a)\). This is done by corresponding \(u\) above as \(x\) in Eq. \eqref{F}, and corresponding \(k_x/a\) above as \(k_x\) in Eq. \eqref{F}. Thus,
-\[\mathcal{F}_x\{ f(ax)\} = \frac{1}{|a|} F(k_x/a)\,. \]
+\[\boxed{\mathcal{F}_x\{ f(ax)\} = \frac{1}{|a|} F(k_x/a)\,.} \]
 </p>
 
 <h3>Differentiation.</h3> 
@@ -373,7 +373,7 @@ The derivative is brought inside the integral, and the integrand is evaluated:
 Again by Eq. \eqref{f}, the inverse spatial Fourier transform is identified:
 \[\mathcal{F}_x \bigg\{ \frac{\partial^n}{\partial x^n} f(x) \bigg\} = \mathcal{F}_x \{\mathcal{F}_x^{-1} [(ik_x)^n F(k_x)]\} \]
 Since the forward and inverse transform are inverses, we obtain
-\[\mathcal{F}_x \bigg\{ \frac{\partial^n}{\partial x^n} f(x) \bigg\} = (ik_x)^n F(k_x)\,.\]
+\[\boxed{\mathcal{F}_x \bigg\{ \frac{\partial^n}{\partial x^n} f(x) \bigg\} = (ik_x)^n F(k_x)\,.}\]
 </p>
 
 <div class="example"><h3>Example: Fourier transform of triangle function</h3>
@@ -588,7 +588,7 @@ To construct \(\mu(x,\epsilon)\), start with another function without an \(\epsi
 \end{align*}
 Then let 
 \begin{align*}
-\mu(x,\epsilon) &= \frac{1}{\epsilon} \zeta(x/\epsilon)
+\mu(x,\epsilon) &= \frac{1}{\epsilon} \zeta(x/\epsilon)\,.
 \end{align*}
 Let us prove that
 \begin{align*}
@@ -679,7 +679,7 @@ Denoting \(\delta'(x) = {d\delta}/{dx}\), a property involving the derivative of
 \end{align*}
 In general, then,
 \begin{align*}
-\int_{-\infty}^{\infty} f(x) \delta^{(n)}(x) = (-1)^n f^{(n)}(0)
+\boxed{\int_{-\infty}^{\infty} f(x) \delta^{(n)}(x) = (-1)^n f^{(n)}(0)}
 \end{align*}</p>
 <h3>Normal mode expansion of the delta function</h3>
 Let 
@@ -701,7 +701,7 @@ Multiply by \(\phi_m\) and take integral of both sides:
 \end{align*}
 Using the sifting property on the left-hand side, the expansion coefficients are \(a_n = \phi_n(x_0)\). Thus Eq. \eqref{expansion} becomes
 \begin{align*}
-\delta(x-x_0) &= \sum_{n} \phi_n(x) \phi_n(x_0)\,.
+\boxed{\delta(x-x_0) = \sum_{n} \phi_n(x) \phi_n(x_0)\,.}
 \end{align*}
 <div class="example"><h3>Example: normal modes on fixed-fixed string</h3>
 The modes of a string are given by 
