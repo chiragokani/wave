@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Diffraction integrals</title>
+ <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+   </script>
+<script>
+window.MathJax = {
+  tex: {
+    tags: 'ams'
+  }
+};
+</script>
+<script type="text/javascript">
+window.MathJax = {
+  tex: {
+    macros: {
+      Order: "{\\mathcal O}",
+      vec: ['\\boldsymbol{#1}',1] ,
+      divergence: "{\\boldsymbol{\\nabla}\\cdot\\,}",
+      grad: "{\\boldsymbol\\nabla}",
+      curl: "{\\boldsymbol\\nabla\\times\\,}",
+      Laplacian: "{\\nabla^2}",
+      dAlambertian: "{\\Box^2}",
+      Order: "{\\mathcal O}",
+      T: "{^\\mathsf{T}}",
+      FTt: "{\\mathcal{F}_t}",
+      IFTt: "{\\mathcal{F}_t^{-1}}",
+      FTx: "{\\mathcal{F}_x}",
+      IFTx: "{\\mathcal{F}_x^{-1}}",      
+      FTr: "{\\mathcal{F}_\\rho}",
+      IFTr: "{\\mathcal{F}_\\rho^{-1}}",    
+      HT: "{\\mathcal{H}_\\rho}",
+      IHT: "{\\mathcal{H}_\\rho^{-1}}",  
+      FTxy: "{\\mathcal{F}_{xy}}",
+      IFTxy: "{\\mathcal{F}_{xy}^{-1}}",
+      rect: "{\\mathrm{\\,rect\\,}}",
+      tri: "{\\mathrm{\\,tri\\,}}",
+      circfn: "{\\mathrm{\\,circ\\,}}",
+      sinc: "{\\mathrm{\\,sinc\\,}}",
+      ex: "{\\hat{e}_x}",           
+      ey: "{\\hat{e}_y}",
+      ez: "{\\hat{e}_z}",
+      ephi: "{\\hat{e}_\\phi}"
+    }
+  }
+};
+</script>	
+  <style>
+    body {
+      margin: 20px;
+      background:  #577abdd8; 
+      font-family: Arial, sans-serif;
+      height: 100%;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      line-height: 1.5;
+    }
+
+    .textbox {
+      background-color: rgba(241, 241, 241, 0.986);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .example {
+      background-color: rgba(197, 197, 197, 0.836);
+      border-radius: 3px;
+      padding-top: 1px;
+      padding-bottom: 10px;
+      padding-right: 20px;
+      padding-left: 20px;
+      margin-bottom: 20px;
+      border-style: solid;
+      border-width: thin;
+      border-color: #9b9b9b94;
+    }
+
+    .wrong {
+      background-color: rgba(255, 205, 205, 0.856);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    nav {
+      background-color: #0000003d;
+      margin-bottom: 20px;
+    }
+
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+    }
+
+    nav ul li {
+      flex: 1;
+    }
+
+    nav ul li a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      text-align: center;
+      padding: 3px;
+    }
+
+    nav ul li a:hover {
+      background-color: #03030365;
+    }
+
+    .Q {
+      color:  #9e0702;
+      font-style: italic;
+    }
+
+    .floating-table-of-contents {
+            position: fixed;
+            top: 100%;
+            right: 15pt;
+            transform: translateY(-50%);
+            background-color:  rgba(255, 255, 255, 0);
+            padding: 3px;
+            border-radius: 6px;
+        }
+
+        .toc-link {
+            display: block;
+            margin-bottom: 20px;
+            color: #091c4165; 
+            text-decoration: none;
+            font-size:8pt;
+        }
+  </style>
+
+</head>
+<body>
+  <nav>
+    <ul>
+	 <li><a href="index.html"> &#127968;</a></li>
+      <li><a href="1.html">1</a></li>
+      <li><a href="2.html">2</a></li>
+      <li><a href="3.html">3</a></li>
+      <li><a href="4.html">4</a></li>
+      <li><a href="5.html">5</a></li>
+      <li><a href="6.html">6</a></li>
+      <li><a href="7.html">7</a></li>
+    </ul>
+  </nav>
+
+<nav class="floating-table-of-contents">
+<a href="#top" class="toc-link">Back to top</a>
+</nav>
+
+<div class="textbox">
+<h1 id="top">Diffraction integrals</h1>
+<p>
+  <i>Contents:</i>
+<ul>
+<li><a href="#angular">Angular spectrum of a spherical wave</a></li>
+<li><a href="#Rayleigh">Derivation of the first Rayleigh integral using Fourier acoustics</a></li>
+<li><a href="#Rayleigh2">Derivation of the second Rayleigh integral using Fourier acoustics</a></li>
+<li><a href="#Fraunhofer">Fraunhofer approximation (Far-field approximation)</a></li>
+</ul>	
+Difficult topics are coloured red, and my personal comments/questions are in <span class="Q">italicized red</span>. </p>
+<p>The first two sections on pressure and velocity source are also covered <a href="https://cag170030.github.io/chirag/fourier_acoustics_notes.pdf" target="_blank" rel="noopener noreferrer">here</a>. The treatment is basically the same, though those notes are slightly more succinctly. (Note that \(\texttt{\hat}\)s are used instead of capital letters for Fourier-transformed quantities in those notes.) </p>
+</div>
+
+
+<div class="textbox"><h2 id="angular">Angular specturm of a spherical wave</h2>
+<div class=Q>Note that this topic is covered in Brekhovskikh, pages 228-229.</div>
+
+<p>Let \(f(x,y,z) = e^{ikr}/r\) be the functional dependence of the radiation due to a point source at \(r=0\) (i.e., the amplitude factor has been neglected), where \(r = \sqrt{x^2+y^2+z^2}\) and \(\rho = \sqrt{x^2 + y^2}\). Now calculate 
+\begin{align*}
+F_0(\kappa) = F_0(k_x,k_y) &= \FTxy \{f(x,y,0)\} = \iint_{-\infty}^\infty \frac{e^{ik\rho}}{\rho} e^{-i(k_xx + k_yy)}\, dx\, dy\\
+&= \FTxy \{f(x,y,0)\} = \iint_{-\infty}^\infty \frac{e^{ik\rho}}{\rho} e^{-i\vec{\kappa}\cdot \vec{\rho}} \rho \, d\rho \, d\phi
+\end{align*}
+As before, due to axisymmetry, take \(\vec{\kappa} = \kappa \hat{e}_x\), giving
+\begin{align*}
+\vec{\kappa} \cdot \vec{\rho} = \kappa\rho \cos\phi\,.
+\end{align*}
+So
+\begin{align*}
+F_0(\kappa)= \int_{0}^{2\pi} d\phi \int_{0}^{\infty} e^{i(k-\kappa \cos \phi)\rho}d\rho
+\end{align*}
+The integrand of the \(\rho\) integral is oscillatory, so the definite integral cannot immediately be determined. To evaluate the integral, let \(k = k + i\epsilon\) and then take \(\epsilon \to 0\). 
+\begin{align*}
+F_0(\kappa) &= \int_{0}^{2\pi} d\phi \frac{e^{i(k-\kappa\cos\phi)} e^{-\epsilon\rho}}{i(k-\kappa \cos\phi)-\epsilon}\bigg\rvert_{\rho=0}^{\rho = \infty}\\
+&= -\int_{0}^{2\pi} \frac{d\phi}{i(k-\kappa \cos\phi)\rho-\epsilon}\\
+&= i\int_{0}^{2\pi} \frac{d\phi}{k-\kappa \cos\phi} = i \frac{2\pi}{\sqrt{k^2- \kappa^2}} = \frac{i2\pi}{k_z}
+\end{align*}
+Note that \(e^{ikr}/r\) is symmetric about the plane \(z=0\), as shown below: 
+<p align="middle"> <img src="sphwave.svg" width="180" height="auto"></p>
+With the Fourier transform of the source condition taken, the full field can therefore be calculated for all \(z\) (both positive and negative) using the standard Fourier acoustics procedure: 
+\begin{align*}
+f(x,y,z) = e^{ikr}/r &= \IFTxy\{F_0(\kappa) e^{ik_z|z|}\}\\
+&= \IFTxy\bigg\{\frac{i2\pi}{k_z} e^{ik_z|z|}\bigg\}\,.
+\end{align*}
+Taking the 2D spatial Fourier transform of both sides above gives
+\begin{align*}
+\boxed{\FTxy \{e^{ikr}/r\} = i2\pi \frac{e^{ik_z|z|}}{k_z}\,.}
+\end{align*}
+Since \(F(\kappa) = 2\pi F_H(\kappa)\), the above can conveniently be written in terms of the Hankel transform \(\HT_1\),
+\begin{align*}
+\HT_1 \{e^{ikr}/r\} = i\frac{e^{ik_z|z|}}{k_z}\,.
+\end{align*}
+<div class="example"><h3>Aside: evanescent waves in spherical radiation</h3>
+Recall that the wavevector \(\vec{k}\) is related to its projection in the \(x\)-\(y\) plane by
+<p align="middle"> <img src="spherical_annotated.svg" width="195" height="auto"></p>
+Thus the Fourier transform of the source condition is
+\begin{align*}
+F_0(\kappa) &= \frac{i2\pi}{\sqrt{k^2-\kappa^2}}\\
+&=\frac{i2\pi}{k\sqrt{1-\sin^2\gamma}}\\
+&= \frac{i2\pi }{k\cos\gamma}\,,\quad \gamma \leq 90^\circ\,.
+\end{align*}
+This is Weyl's integral, given by Williams Eq. (2.64). </p>
+</div>
+</div>
+
+<div class="textbox"><h2 id="Rayleigh">Derivation of Rayleigh integral using Fourier acoustics</h2>
+<div class="Q"><p>This is <i>not</i> how Rayleigh derived his integral. For that, see <a href="https://cag170030.github.io/quals/physical.html#13-14" target="_blank" rel="noopener noreferrer">here</a>. </p></div>
+
+<p>Given an arbitrary normal velocity distribution
+\begin{align*}
+\vec{u} &= (x,y,0,t) = u_0(x,y) e^{-i\omega t} \ez \,.
+\end{align*} 
+Follow the recipe for the calculation of the field. The 2D spatial Fourier transform of the source condition, and its mapping to a pressure source, is
+\begin{align*}
+U_0(k_x,k_y,0) &= \FTxy \{u_0(x,y)\}\,,\\
+P_0(k_x,k_y,0) &= \rho_0c_0 \frac{k}{k_z} U(k_x,k_y,0)
+\end{align*}
+Then the solution to the Helmholtz equation is 
+\begin{align*}
+p_\omega(x,y,z) &= \IFTxy\{P_0(k_x,k_y) e^{ik_zz}\}\\
+&= \rho_0c_0 k\, \IFTxy \{U_0 (k_x,k_y) e^{ik_zz}/k_z\}\\
+&= \rho_0c_0 k\, \IFTxy \{U_0 (k_x,k_y)\} ** \IFTxy\{ e^{ik_zz}/k_z\}\\
+&= \rho_0c_0 k\, u(x,y) ** \frac{e^{ikr}}{i2\pi r}\,,
+\end{align*}
+where \(r= \sqrt{x^2 + y^2 + z^2}\), and where the result from the previous section, \(\FTxy \{e^{ikr}/r\} = i2\pi e^{ik_z|z|}/k_z\), has been used to evaluate the third line above. Writing the convolution explicitly and denoting \[R = \sqrt{(x-x_0)^2 + (y-y_0)^2 + z^2}\] results in the so-called <i>Rayleigh integral of the first kind</i> of acoustics:
+\begin{align*}
+\boxed{p_\omega (x,y,z) = -\frac{ik\rho_0c_0}{2\pi} \iint_{-\infty}^\infty u_0(x_0,y_0) \frac{e^{ikR}}{R} dx_0 dy_0\,.}
+\end{align*}
+</p>
+
+<div class="example"><h2 id="Rayleigh">Example: Point velocity source (baffled monopole):</h2>
+The source condition for a point velocity source is
+\begin{align*}
+u_0(x,y) &= Q\delta(x)\delta(y)\,,
+\end{align*}
+where \(Q\) is a volume velocity. Insertion of this source condition into the Rayleigh integral gives
+\begin{align*}
+p_\omega(r) &= -\frac{ik\rho_0c_0Q}{2\pi} \iint_{-\infty}^\infty \delta(x_0) \delta(y_0)\frac{e^{ikR}}{R} dx_0\, dy_0\\
+&= -\frac{ik\rho_0c_0Q}{2\pi} \frac{e^{ikr}}{r} = -i\omega Q \frac{\rho_0e^{ikr}}{2\pi r}\,. 
+\end{align*}
+This is the expression for a monopole radiating in a half-space. Multiply by \(1/2\) for the expression for the radiation due to a monopole in free space. 
+</div>
+</div>
+
+<div class="textbox"><h2 id="Rayleigh2">Derivation of second Rayleigh integral using Fourier acoustics</h2>
+Note that this is called the first Rayleigh integral of optics.
+
+Consider a <i>pressure</i> source
+\begin{align*}
+p(x,y,0,t) = p_0(x,y) e^{-i\omega t}\,.
+\end{align*}
+Then take its 2D spatial Fourier transform:
+\begin{align*}
+P_0(k_x,k_y) = \FTxy\{p_0(x,y)\}\,.
+\end{align*}
+The field is given by 
+\begin{align*}
+p_\omega(x,y,z) &= \IFTxy \{P_0(k_x,k_y) e^{ik_zz}\}\\
+&= p_0(x,y) ** \IFTxy\{e^{ik_zz}\}
+\end{align*}
+Note that 
+\begin{align*}
+\IFTxy\{e^{ik_zz}\} &= \IFTxy\{ik_z e^{ik_zz}/ik_z\}\\
+&= \frac{\partial}{\partial z} (-e^{ikr}/2\pi r) 
+\end{align*}
+because \(\FTxy\{e^{ikr}/r\ = (i2\pi/k_z) e^{ik_z|z|}\). So 
+\begin{align*}
+p_\omega(x,y,z)
+&= p_0(x,y) ** \frac{\partial}{\partial z} (-e^{ikr}/2\pi r) 
+\end{align*}
+The full solution becomes
+\begin{align*}
+p_\omega(x,u,z) = -\frac{1}{2\pi} \iint_{-\infty}^\infty p_0(x_0,y_0) \frac{\partial}{\partial z} \frac{e^{ikR}}{R} dx_0 dy_0 \,.
+\end{align*}
+Note that 
+\begin{align*}
+\frac{\partial }{\partial z} (e^{ikR}/R) = (ik- 1/R) e^{ikR}/R \frac{\partial R}{\partial z}\,.
+\end{align*}
+and 
+\begin{align*}
+\frac{\partial R}{\partial z} &= \frac{\partial}{\partial z }\sqrt{(x-x_0)^2 + (y-y_0)^2 + z^2}\\
+&= \frac{2z}{2R} = z/R\,.
+\end{align*}
+So 
+\begin{align*}
+\frac{\partial }{\partial z} (e^{ikR}/R) &= (ik- 1/R) e^{ikR}/R \frac{z}{R}\\
+&= ikz (1- 1/ikR) e^{ikR}/R^2
+\end{align*}
+The Rayleigh integral becomes 
+\begin{align*}
+\boxed{p_\omega(x,y,z) = -\frac{ikz}{2\pi} \iint_{-\infty}^\infty p_0(x,y) (1- 1/ikR) \frac{e^{ikR}}{R^2} dx_0 dy_0\,.}
+\end{align*}
+</div>
+
+<div class="textbox"><h2 id="Fraunhofer">Fraunhofer approximation (Far-field approximation)
+</h2>
+
+<p>The first Rayleigh integral is, again,
+\begin{align}\tag{1}\label{Rayleigh1}
+p_\omega(x,y,z) &= -\frac{ik\rho_0c_0}{2\pi } \iint_{-\infty}^\infty u(x_0,y_0) \frac{e^{ikR}}{R} dx_0 dy_0
+\end{align}
+Begin by considering \(R\):
+\begin{align*}
+R &= \sqrt{(x-x_0)^2 + (y-y_0)^2 + z^2}\\
+&= \sqrt{r^2 - 2(xx_0 + yy_0) + (x_0^2 + y_0^2)}\\
+&= r \bigg( 1 - 2 \frac{xx_0 + yy_0}{r^2} + \frac{x_0^2 + y_0^2}{r^2} \bigg)^{1/2}
+\end{align*}
+Binomially expanding (\((1+ \epsilon)^n \simeq 1 + n\epsilon\)) gives
+\begin{align*}
+R &=  r  -  \frac{xx_0 + yy_0}{r} + \frac{x_0^2 + y_0^2}{2r} + \Order(1/r^3)
+\end{align*}
+Assume a finite source:
+<p align="middle"> <img src="fraun_source.svg" width="250" height="auto"></p>
+The velocity source is negligible for \(x^2 + y^2 \geq a^2\), i.e., \(u_0(x,y)\simeq 0\). Thus the integrand in Eq. \eqref{Rayleigh1} is negligible for \(x_0^2 + y_0^2 \geq a^2\). So for 
+\begin{align*}
+k \frac{x_0^2 + y_0^2}{2r} &= \Order (ka^2/2r) \ll 1
+\end{align*}
+i.e., \(r \gg \frac{1}{2} ka^2\). Thus
+\begin{align}\tag{2}\label{exp}
+e^{ikR} \simeq \exp\bigg(ikr - ik \frac{xx_0 + yy_0}{r}\bigg)
+\end{align}
+Define 
+\begin{align*}
+z_0 &= \frac{1}{2} ka^2 = \pi a^2/\lambda \sim \frac{S}{\lambda}
+\end{align*}
+as the Rayleigh distance. For the case of a circular piston, the Rayleigh distance is exactly the ratio of the surface area of the source to the wavelength emmitted. </p>
+
+<p>Meanwhile the big \(R\) is approximated as \(r\). So, for \(r \gg z_0\), Eq. \eqref{Rayleigh1} becomes 
+\begin{align*}
+p_\omega (x,y,z) = -\frac{ik\rho_0 c_0}{2\pi} \frac{e^{ikr}}{r} \iint_{-\infty}^\infty u_0(x_0,y_0) e^{-i(kxx_0/r + kyy_0/r)} dx_0 dy_0\,.
+\end{align*}
+The above can be written as 
+\begin{align*}
+p_\omega (x,y,z) = -\frac{ik\rho_0 c_0}{2\pi} \frac{e^{ikr}}{r} \FTxy \{u_0(x,y)\}\bigg\rvert_{k_x=kx/r\,,k_y =ky/r}\,.
+\end{align*}
+In spherical coordinates, this reads
+\begin{align*}
+\boxed{p_\omega (r,\theta,\phi) = -\frac{ik\rho_0 c_0}{2\pi} \frac{e^{ikr}}{r} U_0(k\alpha,k\beta)\,,}
+\end{align*}
+where 
+\begin{align*}
+\alpha = x/r = \sin\theta\cos\phi\\
+\beta = y/r = \sin\theta\sin\phi\,.
+\end{align*}
+For axisymmetric cases, 
+\begin{align*}
+U_0 = U_0(\kappa)\big\rvert_{\kappa = k\rho/r} = U_0(k\sin\theta)\,.
+\end{align*}</p>
+
+<p>Let us consider the range of wavenumber components that the approximation spans:
+\begin{align*}
+(k\alpha)^2 + (k\beta)^2 &= k^2 \sin^2\theta \, (\cos^2\phi + \sin^2\phi) = k^2 \sin^2\theta\\
+&\leq k^2\, \theta \leq 90^\circ\,.
+\end{align*} 
+Thus the Fraunhofer approximation accounts for only the contributions that propagate. That is to say, the half-space \(0^\circ \leq \theta \leq 90^\circ\) covers all values of \((k\alpha, k\beta) = (k_x,k_y)\) within the radiation circle.  </p>
+
+
+<div class="example"><h3>Example: Axial field</h3>
+To describe the axial field, set \(\theta =0\) so \(x=y=0\), \(\alpha = \beta = 0\), \(r = z\). So 
+\begin{align*}
+U_0(0,0) &=Q = \text{volume velocity}\,,
+\end{align*}
+so the axial far field is 
+\begin{align*}
+p(z,t) &= -\frac{ik\rho_0 c_0}{2\pi} \frac{e^{ikz}}{z} Q e^{-i\omega t}\\
+&= \frac{\rho_0}{2\pi z} [-i\omega Q e^{-i\omega (t - z/c_0)}]\\
+&\to \rho_0 \frac{\dot{Q}(t-z/c_0)}{2\pi z}
+\end{align*}
+This is the same solution as for a baffled simple (point) source (whereas for free space, a \(4\) appears in the denominator). Note that the axial waveform is the time derivative of the source waveform.
+</div>
+
+ 
+<div class="example"><h3>Example: Beamwidth</h3>
+The characteristic source radius is \(\rho \sim a\). The characteristic radius of the angular spectrum is then \(\kappa \sim 1/a\), because the product must be a constant. 
+
+Example: Gaussian source
+\begin{align*}
+u_0(\rho) = u_0 e^{-(\rho/a)^2}\,.
+\end{align*}
+The Fourier transform of a Gaussian is a Gaussian:
+\begin{align*}
+U_0(\kappa) &= 2\pi \HT \{u_0(\rho)\} = \pi a^2 u_0 e^{-(\kappa a/2)^2}\\
+&=\pi a^2 u_0 \exp\bigg[-\bigg(\frac{\kappa}{2/a}\bigg)^2 \bigg]
+\end{align*}
+In the far field, \(p_\omega(\theta) \propto U_0(k\sin\theta)\), so 
+\begin{align*}
+\kappa_\text{max} \sim 1/a \implies k\sin\theta_\text{max} \sim 1/a\,,
+\end{align*}
+so 
+\begin{align*}
+\theta_\text{max} &\sim \arcsin (1/k a)\\
+\theta_\text{max} &\sim 1/ka\, \quad ka\gg 1
+\end{align*}
+The half-power beamwidth of the Gaussian is
+</div>
+</div>
+
+</body>
+</html>
