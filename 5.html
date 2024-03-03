@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Paraxial approximation</title>
+ <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+   </script>
+<script>
+window.MathJax = {
+  tex: {
+    tags: 'ams'
+  }
+};
+</script>
+<script type="text/javascript">
+window.MathJax = {
+  tex: {
+    macros: {
+      Order: "{\\mathcal O}",
+      vec: ['\\boldsymbol{#1}',1] ,
+      divergence: "{\\boldsymbol{\\nabla}\\cdot\\,}",
+      grad: "{\\boldsymbol\\nabla}",
+      curl: "{\\boldsymbol\\nabla\\times\\,}",
+      Laplacian: "{\\nabla^2}",
+      dAlambertian: "{\\Box^2}",
+      Order: "{\\mathcal O}",
+      T: "{^\\mathsf{T}}",
+      FTt: "{\\mathcal{F}_t}",
+      IFTt: "{\\mathcal{F}_t^{-1}}",
+      FTx: "{\\mathcal{F}_x}",
+      IFTx: "{\\mathcal{F}_x^{-1}}",      
+      FTr: "{\\mathcal{F}_\\rho}",
+      IFTr: "{\\mathcal{F}_\\rho^{-1}}",    
+      HT: "{\\mathcal{H}}",
+      IHT: "{\\mathcal{H}^{-1}}",  
+      FTxy: "{\\mathcal{F}_{xy}}",
+      IFTxy: "{\\mathcal{F}_{xy}^{-1}}",
+      rect: "{\\mathrm{\\,rect\\,}}",
+      tri: "{\\mathrm{\\,tri\\,}}",
+      circfn: "{\\mathrm{\\,circ\\,}}",
+      sinc: "{\\mathrm{\\,sinc\\,}}",
+      ex: "{\\hat{e}_x}",           
+      ey: "{\\hat{e}_y}",
+      ez: "{\\hat{e}_z}",
+      ephi: "{\\hat{e}_\\phi}",
+      thetaHP: "{\\theta_{\\mathrm{HP}}}",
+      
+    }
+  }
+};
+</script>	
+  <style>
+    body {
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.5;
+      max-width: 1000px; /* Adjust this value as needed */
+      background:  #577abdd8; 
+      font-family: Arial, sans-serif;
+    }
+
+    .textbox {
+      background-color: rgba(241, 241, 241, 0.986);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .example {
+      background-color: rgba(197, 197, 197, 0.836);
+      border-radius: 3px;
+      padding-top: 1px;
+      padding-bottom: 10px;
+      padding-right: 20px;
+      padding-left: 20px;
+      margin-bottom: 20px;
+      border-style: solid;
+      border-width: thin;
+      border-color: #9b9b9b94;
+    }
+
+    .wrong {
+      background-color: rgba(255, 205, 205, 0.856);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    nav {
+      background-color: #0000003d;
+      margin-bottom: 20px;
+    }
+
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+    }
+
+    nav ul li {
+      flex: 1;
+    }
+
+    nav ul li a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      text-align: center;
+      padding: 3px;
+    }
+
+    nav ul li a:hover {
+      background-color: #03030365;
+    }
+
+    .Q {
+      color:  #9e0702;
+      font-style: italic;
+    }
+
+    .floating-table-of-contents {
+            position: fixed;
+            top: 100%;
+            right: 15pt;
+            transform: translateY(-50%);
+            background-color:  rgba(255, 255, 255, 0);
+            padding: 3px;
+            border-radius: 6px;
+        }
+
+        .toc-link {
+            display: block;
+            margin-bottom: 20px;
+            color: #091c4165; 
+            text-decoration: none;
+            font-size:8pt;
+        }
+  </style>
+
+</head>
+<body>
+  <nav>
+    <ul>
+	 <li><a href="index.html"> &#127968;</a></li>
+      <li><a href="1.html">1</a></li>
+      <li><a href="2.html">2</a></li>
+      <li><a href="3.html">3</a></li>
+      <li><a href="4.html">4</a></li>
+      <li><a href="5.html"><b>5</b></a></li>
+      <li><a href="6.html">6</a></li>
+      <li><a href="7.html">7</a></li>
+    </ul>
+  </nav>
+
+<nav class="floating-table-of-contents">
+<a href="#top" class="toc-link">Back to top</a>
+</nav>
+
+<div class="textbox">
+<h1 id="top">Fresnel approximation</h1>
+<blockquote><i>In choosing a theory, one should pay attention to simplicity in hypotheses only. Simplicity in computation can be of no weight in the balance of probabilities. Nature is not embarrassed by difficulties of analysis. She avoids complication only in means. Nature seems to have proposed to do much with little: it is a principle that the development of physics constantly supports by new evidence.</i></blockquote>
+<p align="right">&ndash;<a href="https://en.wikiquote.org/wiki/Augustin-Jean_Fresnel" target="_blank" rel="noopener noreferrer">Augustin-Jean Fresnel</a></p>
+
+<p>The study of focused sources motivates the Fresnel (also called "paraxial" or "near-field") approximation. The Fresnel approximation is not limited to focused sources, however, and it allows for analytical ease in the study of general diffraction phenomena. Neither is the Fresnel approximation limited in \(z\): indeed, a far-field approximation of the Fresnel approximation can be taken.</p>
+<p>
+  <i>Contents:</i>
+<ul>
+<li><a href="#Focused">Focused soruces</a></li>
+<li><a href="#Fresnel">Fresnel approximation</a></li>
+<li><a href="#Far">Far field of Fresnel approximation</a></li>
+</ul>	
+</p>
+</div>
+
+<div class="textbox"><h2 id="Focused">Focused sources</h2>
+<p>
+Consider a spherical wave converging at \(z = d >0\). The pressure field is then
+\begin{align*}
+p_\omega (x,y,z) &= A \frac{e^{-ikR}}{R}\\
+&= A \frac{e^{ik\sqrt{x^2 + y^2 + (d-z)^2}}}{\sqrt{x^2 + y^2 + (d-z)^2}}\,,
+\end{align*}
+where the dimensions of \(A\) are pressure \(\times\) distance. At \(z = 0\), the pressure field is 
+\begin{align}\label{pressure at 0}\tag{1}
+p_\omega (x,y,0) &= A \frac{e^{-ik\sqrt{x^2 + y^2 + d^2}}}{\sqrt{x^2 + y^2 + d^2}} \,.
+\end{align}
+In the absence of diffraction (ray theory), any finite source at \(z=0\) with the above phasing will focus at \((x,y,z) = (0,0,d)\): 
+<p align="middle"> <img src="focused_source.svg" width="260" height="auto"></p>
+Let us assume that \(p_0(x,y)\) or \(u_0(x,y)\sim 0\) for \(x^2 +y^2 \geq a^2\), where \(a\) is the characteristic source radius, and that \(a^2 \ll d\). This is to say that the so-called \(f\)-number: \(N  = d/2a \sim 1/2\alpha\) so \(N^2 \gg 1\). </p>
+
+The phase in Eq. \eqref{pressure at 0} can be approximated by 
+\begin{align*}
+-ik\sqrt{x^2 + y^2 + d^2} &= -ikd \bigg(1 + \frac{x^2 + y^2}{d^2}\bigg)^{1/2}\\
+&= -ikd + ik \frac{x^2 + y^2}{2d} + \Order(ka^2/d^3)\,. 
+\end{align*}
+Meanwhile, the amplitude is approximated as 
+\begin{align*}
+\frac{A}{\sqrt{x^2 + y^2 + d^2}} \simeq \frac{A}{d}\,,
+\end{align*}
+which has units of pressure (pressure \(\times\) distance \(\div\) distance \(=\) pressure).
+So the source condition,  Eq. \eqref{pressure at 0}, becomes
+\begin{align*}
+p_\omega (x,y,0) &= A \frac{e^{-ikd}}{d} e^{-ik(x^2 + y^2)/2d}\,.
+\end{align*}
+Thus if 
+\begin{align*}
+u_0(x,y)\,, \,\, p_0(x,y) = \text{ unfocused source distribution,}
+\end{align*}
+focusing is achieved by multiplying by \(e^{-ik(x^2+y^2)/2d}\),
+or in axisymmetric form,
+\(e^{-ik(x^2+y^2)/2d}\). The factor \(A {e^{-ikd}}/{d}\) can be neglected because phase is a relative quantity, and because \(A/d\) is simply a pressure amplitude that can be included in the pressure source amplitude \(p_0\) or the velocity source amplitude \(u_0 = p_0/\rho_0c_0\). Reintroducing the time dependence renders focusing as time-advancing:
+\begin{align*}
+e^{-i\omega t} e^{-ik\rho^2/2d} = e^{-i\omega (t + \rho/2c_0d)}\,.
+\end{align*}
+That is to say, focusing is achieved in the time domain by the transformation
+\begin{align*}
+t \mapsto t + \frac{\rho^2}{2c_0 d}\,,
+\end{align*}
+i.e., the further from the origin, the earlier the waveform must be launched. </p>
+
+<h3>Field in the focal plane of a focused source.</h3><p>In the focal plane \(z = d\), consider a focused velocity source
+\begin{align*}
+u(x,y,0,t) &= u_0(x,y) e^{-ik(x^2+y^2)/2d}e^{-i\omega t}\,.
+\end{align*}
+The Rayleigh integral evaluated at the focal plane is
+\begin{align}\label{Rayleigh}\tag{R}
+p_{\omega}(x,y,d) &= - \frac{ik\rho_0c_0}{2\pi} \iint_{-\infty}^\infty u_0(x_0,y_0) e^{-ik({x_0^2 + y_0^2})/2d} \frac{e^{ikR}}{R} \, dx_0 \, dy_0\,,
+\end{align}
+where 
+\begin{align*}
+ikR &= ik\sqrt{(x-x_0)^2 + (y-y_0)^2 + d^2}\\
+&= ikd\bigg(1 + \frac{x^2 + y^2}{d^2} - 2\frac{xx_0 + yy_0}{d^2} + \frac{x_0^2 + y_0^2}{d^2}\bigg)^{1/2}\\
+&= ikd + ik \frac{x^2+ y^2}{2d} - ik \frac{xx_0 + yy_0}{d} + ik\frac{x_0^2 +y_0^2}{2d} + \Order(ka^2/d^3)\,.
+\end{align*}
+In the amplitude, let \(1/R \simeq 1/d\). Equation \eqref{Rayleigh} becomes
+\begin{align}\label{fullint}\tag{2}
+p_\omega(x,y,d) &= -\frac{ik\rho_0c_0}{2\pi d} e^{ikd + ik(x^2+y^2)/2d} \iint_{-\infty}^\infty u_0(x_0,y_0) e^{-ikxx_0/d - ikyy_0/d}\, dx_0 dy_0\,,
+\end{align}
+the magnitude of which is 
+\begin{align}\label{focalpress}\tag{3}
+\boxed{|p_\omega (x,y,d)| = \frac{k\rho_0c_0}{2\pi d} \big|U_0(kx/d, ky/d) \big|\,,}
+\end{align}
+or in axisymmetric form, since \(U_0(\kappa) = 2\pi U_{0H}(\kappa)\), 
+\begin{align}\label{focalpress'}\tag{3'}
+\boxed{|p_\omega (\rho,d)| = \frac{k\rho_0c_0}{d} \big|U_{0H}(k\rho/d) \big|\,,}
+\end{align}
+That is to say, <i>the field in the focal plane is but a spatial mapping of the far field into the focal plane: both are given in terms of the 2D spatial Fourier transform of the source condition.</i> </p>
+
+<h3>Field at the the focal <i>point</i> of a focused source.</h3>
+<p>Further insight can be gained from assessing the field at the focal <i>point</i> \((x,y,z) = (0,0,d)\), Eq. \eqref{focalpress} becomes 
+\begin{align*}
+{|p_\omega (0,0,d)| = \frac{k\rho_0c_0}{2\pi d} Q}
+\end{align*}
+Let \(Q  = \bar{u}_0 S\), where \(S\) is the surface area of the source, and where the <i>mean source particle velocity </i> is 
+\begin{align*}
+\bar{u}_0 = \frac{Q}{S} = \frac{U_0(0,0)}{S} = \frac{1}{S}\int_{S} u_0(x,y) dS\,.
+\end{align*}
+Then, since \(|p_\omega (0,0,d)| = \frac{k\rho_0c_0}{2\pi d} Q\), the ratio of the pressure at the focal point to that in a plane wave with mean source particle velocity is
+\begin{align*}
+\frac{|p_\omega(0,0,d)|}{\rho_0c_0\bar{u}_0} = \frac{kS}{2\pi d} = \frac{S}{\lambda d}\,.
+\end{align*}
+Define 
+\begin{align}
+\boxed{G = \frac{S}{\lambda d} = \text{ focusing gain}\,,}
+\end{align}
+which for a uniform circular piston of surface area \(S = \pi a^2\) reduces to 
+\begin{align*}
+G = \frac{ka^2}{2d} = \frac{z_0}{d}\,.
+\end{align*}
+Note: the geometric focus at \((x,y,z) = (0,0,d)\) is typically further beyond the location of the maximum axial amplitude.  
+</p>
+
+<p>The so-called ''spot size'' for a source of characteristic size 
+\(a\) corresponds to the \(k\)-space ''radius.'' From Eqs. \eqref{fullint} or \eqref{focalpress'}, in the focal plane, this corresponds to 
+\begin{align*}
+\frac{k \rho}{d} \sim \frac{1}{a}
+\end{align*}
+or 
+\begin{align*}
+\rho \sim \frac{d}{ka} = a \frac{d}{ka^2} \sim \frac{a}{G}\,.
+\end{align*}
+Thus beam radius is reduced by \(\sim 1/G\) in the focal plane.   
+</p>
+
+<h3>Focal point in the time domain.</h3>
+<p> Recall Eq. \eqref{focalpress}, copied below for convenience
+\begin{align*}
+|p_\omega (x,y,d)| = \frac{k\rho_0c_0}{2\pi d} \big|U_0(kx/d, ky/d) \big|\,.
+\end{align*}
+In the time domain, the field at the focal point is
+\begin{align*}
+|p_\omega (0,0,0,t)| &= -i\omega \frac{\rho_0 Q}{2\pi d} e^{i(kd-\omega t)}\\
+&= \frac{\rho_0 \dot{Q}(t-d/c_0)}{2\pi d}\,.
+\end{align*}
+The expansion of \(ikR\) led to linear order led to the discarding of a term that was \(\Order(ka^4/d^3)\). So
+\begin{align*}
+\frac{ka^4}{8d^3} &= \frac{1}{4} \frac{ka^2}{2d} \frac{a^2}{d^2} = \frac{G}{4} \bigg(\frac{a}{d}\bigg)^2\,.
+\end{align*} 
+For diagnostic medical ultrasound, \(G = 4\), \(a/d \simeq \frac{1}{8}\). So 
+\begin{align*}
+\frac{G}{4} \bigg(\frac{a}{d}\bigg)^2 \sim 10^{-2} \ll 2\pi 
+\end{align*}
+In Lucas and Muir [JASA <b>72</b>, 1289 (1982)], \(G \sim 40\) and \(\frac{a}{d} \simeq \frac{1}{4}\), so \[\frac{G}{4} \bigg(\frac{a}{d}\bigg) \sim 0.6 \ll 2\pi\,.\]</p>
+
+
+<div class="example"><h3>Example: Focused Gaussian source</h3>
+<p>
+The source condition of a Gaussian is 
+\begin{align*}
+u_0(\rho) &= u_0 e^{-\rho^2/a^2}\,,
+\end{align*}
+and its 2D spatial Fourier transform is 
+\begin{align*}
+U_0(\kappa) &= 2\pi \HT \{u_0(\rho)\} \\
+&= 2\pi  u_0 \int_{0}^{\infty} e^{-\rho^2/a^2} J_0(\kappa\rho)\, \rho d\rho\\
+&= \pi a^2 u_0 e^{-\kappa^2 a^2/4}\,.
+\end{align*}
+From Eq. \eqref{focalpress}, the field in the focal plane is
+\begin{align*}
+|p_\omega (x,y,d)| &= \frac{k\rho_0c_0}{2\pi d} \big|U_0(kx/d, ky/d) \big| = \frac{ka^2\rho_0c_0 u_0}{2d} e^{-\kappa^2 a^2 \rho^2/4d^2}
+\end{align*}
+or, upon normalizing, 
+\begin{align*}
+\frac{|p_\omega(\rho,d)|}{\rho_0 c_0 u_0} &= G e^{-\rho^2/(a/G)^2}\,,
+\end{align*}
+where \(G = ka^2/2d\). Thus the amplitude is seen to by magnified by \(G\), and the beamwidth is shrunk by \(G\). </p>
+</div>
+</div>
+
+
+<div class="textbox"><h2 id="Fresnel">Fresnel approximation</h2>
+<p>Begin with the Rayleigh integral
+\begin{align}\label{1Rayleigh}\tag{1}
+p_\omega (x,y,z) = -\frac{ik\rho_0c_0}{2\pi} \iint_{-\infty}^\infty u_0(x_0,y_0) \frac{e^{ikR}}{R} dx_0 dy_0\,.
+\end{align}
+Now expand \(R\) in powers of \(1/z\) (rather than \(1/r\), as was done in the Fraunhofer approximation):
+\begin{align*}
+kR &= k \sqrt{(x-x_0)^2 + (y-y_0)^2 + z^2}\\
+&= kz \bigg[1  + \frac{(x-x_0)^2}{z^2} + \frac{(y-y_0)^2}{z^2}\bigg]^{1/2}\\
+&= kz + \frac{k}{2z} [(x-x_0)^2 + (y-y_0)^2] + \text{H.O.T.}\,.
+\end{align*}
+Terminating the above at \(\Order (1/z)\) for the phase is less restrictive than the Fraunhofer approximation because we have retained the term
+\begin{align*}
+\frac{k(x_0^2 + y_0^2)}{2z}\,,
+\end{align*} 
+i.e., it is not required that \(ka^2/2z \ll 1\) as in the Fraunhofer approximation. Now the restriction appears to be 
+\begin{align*}
+\frac{k}{8z^3}[(x-x_0)^2 + (y-y_0)^2 ]^2 \sim \frac{ka^4}{8z^3} \ll 2\pi
+\end{align*}
+or 
+\begin{align*}
+\frac{z}{a} \gg \frac{ka}{16\pi}
+\end{align*}
+or 
+\begin{align*}
+\boxed{\frac{z}{a} \gtrsim  (ka)^{1/3}\,,}
+\end{align*}
+though this restriction can be weaker as the main contribution to the integral can come from points \((x_0,y_0) \sim (x,y)\) due to phase variations. Substituting the approximation of \(kR\) into \eqref{1Rayleigh} gives
+\begin{equation}\label{2fresnel}\tag{2}
+\boxed{p_\omega(x,y,z) = -\frac{ik\rho_0c_0}{2\pi} \frac{e^{ikz}}{z} \iint_{-\infty}^\infty u_0(x_0,y_0) e^{\frac{ik}{2z}[(x-x_0)^2 + (y-y_0)^2]} \, dx_0\,dy_0\,.}
+\end{equation}
+For axisymmetric sources, \(u_0(x,y) = u_0(\rho)\), so 
+\begin{align*}
+(x-x_0)^2 + (y-y_0)^2 &= (\vec{\rho} - \vec{\rho}_0)\cdot (\vec{\rho}-\vec{\rho}_0)\\
+&= \rho^2 + \rho_0^2 - 2\rho\rho_0\cos\phi_0
+\end{align*}
+for \(\vec{\rho} = \rho \ex\). Thus \(\phi =0\), so Eq. \eqref{2fresnel} becomes
+\begin{align*}
+p_\omega(\rho,z) &=  -\frac{ik\rho_0c_0}{2\pi} \frac{e^{ikz}}{z} e^{ik\rho^2/2z} \int_{0}^{\infty} u_0(\rho_0) e^{ik\rho_0^2/2z} \rho_0\, d\rho_0 \int_{0}^{2\pi} e^{-i(k\rho\rho_0/z)\cos\phi_0} d\phi_0\,. 
+\end{align*}
+Taking the angular integral results in a Bessel function \(2\pi J_0(k\rho\rho_0/z)\): 
+\begin{align}\label{3fresnel}\tag{3}
+p_\omega(\rho,z) &=  -\frac{ik\rho_0c_0}{2\pi} \frac{e^{ikz}}{z} e^{ik\rho^2/2z} \int_{0}^{\infty} u_0(\rho_0) J_0(k\rho\rho_0/z) e^{ik\rho_0^2/2z} \rho_0\, d\rho_0 \,. 
+\end{align}
+In general,
+\begin{align*}
+p_\omega(x,y,z) &= q_\omega(x,y,z) e^{ikz}\,,
+\end{align*}
+where \(q_\omega\) varies slowly on the scale of a wavelength. In other words, if \(p_\omega\) is a plane wave, then \(q_\omega\) is a constant (the most slowly varying function). </p>
+
+<div class="example"><h3>Example: Pressure source in the Fresnel approximation</h3>
+<p>How does the paraxial approximation change for a pressure source? Recall the (exact) second Rayleigh integral:
+\begin{align}\label{1pressfresnel}\tag{1}
+p_\omega(x,y,z) &= -\frac{ikz}{2\pi} \int_{-\infty}^{\infty} p_0(x_0,y_0)\bigg(1 - \frac{1}{ikR}\bigg) \frac{e^{ikR}}{R^2} dx_0 dy_0\,.
+\end{align}
+Since in the paraxial approximation \(kR \gg 1\) and \(R\sim z\), Eq. \eqref{1pressfresnel} becomes 
+\begin{align*}
+p_\omega(x,y,z) &= -\frac{ik}{2\pi} \int_{-\infty}^{\infty} p_0(x_0,y_0) \frac{e^{ikR}}{R^2} dx_0 dy_0\,,
+\end{align*}
+which is equivalent to the Rayleigh integral for a velocity source, if \(p_0(x,y) = \rho_0c_0 u(x,y)\). So, the paraxial approximation cannot tell the difference between a pressure and velocity source. That is to say, in the paraxial approximation it is consistent to use the plane wave impedance relation to convert from a velocity source to a pressure source. Further, the solutions do not distinguish between rigid and free baffles, i.e., the paraxial approximation can describe radiation from a source in free space, as well as it can describe radiation from a baffled or rigid surface. 
+</p>
+</div>
+<div class="example"><h3>Example: Gaussian beams</h3>
+<p>
+Gaussian beams
+Suppose the source condition is 
+\begin{align*}
+p_0(\rho) = p_0 e^{-\rho^2/a^2}.
+\end{align*}
+The Fresnel approximation becomes 
+\begin{align*}
+p_\omega(\rho,z)&= -ik \frac{e^{ikz}}{z} e^{ik\rho^2/2z} \int_{0}^{\infty}p_0(\rho_0) J_0(k\rho\rho_0/z) e^{=ik\rho_0^2/2z} \rho_0 d\rho_0\\
+&= -ik \frac{e^{ikz}}{z} e^{ik\rho^2/2z} \HT\{ e^{-(1+z_0/iz)\rho^2/a^2}\}\big\rvert_{\kappa = k \rho/z}\,,
+\end{align*}
+where \(z_0 = ka^2/2\), \(\HT\{e^{-\rho^2/b^2}\} = \frac{b^2}{2} e^{-\kappa^2b^2/4} \), and \(b^2 = \frac{a^2}{1+z_0/iz}\). After taking the Hankel transform, one obtains
+\begin{align*}
+p(\rho,z) &=\frac{p_0e^{ikz}}{1 + iz/z_0} \exp\bigg\{-\frac{\rho^2/a^2}{1 + iz/z_0} \bigg\}\,,
+\end{align*}
+which equals the source condition at \(z=0\). Note that the Gaussian beam is of the form 
+\begin{align*}
+p_\omega(\rho,z) &= q_\omega(\rho,z) e^{ikz}\,.
+\end{align*}
+
+</p>
+</div>
+</div>
+
+<div class="textbox"><h2 id="Far">Far field of Fresnel approximation</h2>
+<p>
+From Eq. \eqref{2fresnel}, for \(z \gg z_0 = \frac{1}{2} ka^2\), one obtains
+\begin{align*}
+p_\omega(x,y,z) &= -\frac{ik\rho_0c_0}{2\pi} \frac{e^{ikz}}{z} e^{ik(x^2+y^2)/2z}\iint_{-\infty}^\infty u_0(x_0,y_0) e^{-i(kxx_0/z_0 + kyy_0/z_0)} dx_0 dy_0\,.
+\end{align*}
+Thus the far field of the Fresnel approximation is 
+\begin{align}\label{4fresnel}\tag{4}
+p_\omega(x,y,z)&= -\frac{ik\rho_0c_0}{2\pi} \frac{e^{ikz}}{z} e^{ik(x^2+y^2)/2z} U_0(kx/z,ky/z)\,.
+\end{align}
+For an axisymmetric beam, the far-field approximation of the Fresnel approximation reads
+\begin{align*}
+p_\omega(z,\theta)= -ik\rho_0c_0 \frac{e^{ikz}}{z} e^{i\frac{1}{2} kz \tan^2\theta} U_H(k\tan \theta)\,.
+\end{align*}
+Compare Eq. \eqref{4fresnel} with the Fraunhofer approximation in spherical coordinates,
+\begin{align}\label{5fresnel}\tag{5}
+p_\omega(r,\theta,\phi) &= -\frac{ik\rho_0c_0}{2\pi} \frac{e^{ikr}}{r} U_0 (k\alpha,k\beta)\,,
+\end{align}
+where 
+\begin{align*}
+\alpha &= x/r = \sin\theta\cos\phi\,,\\
+\beta &= y/r = \sin\theta\sin\phi\,,
+\end{align*}
+where Eq. \eqref{5fresnel} is exact for all \((\theta,\phi)\). Some important distinctions between Eqs. \eqref{4fresnel} and \eqref{5fresnel} are made:
+<ul>
+<li><b>Wavefront curvature.</b> From Eq. \eqref{5fresnel}, 
+\[e^{ikr} = e^{ik\sqrt{x^2+y^2+z^2}}= e^{ikz[1+(x^2+y^2)/z^2]}\]
+Only near the \(z\) axis can we expand and write 
+\[e^{ikr} = e^{ikz}e^{ik(x^2 +y^2)/2z}\,. \]
+</li>
+<li><b>Angular dependence.</b> From Eq. \eqref{5fresnel}, 
+\[p_\omega(\theta,\phi) \propto |U_0(k\sin\theta\cos\phi, k\sin\theta\sin\phi)|\,.\]
+Only for small \(\theta\) can the above equation be written as
+\begin{align*}
+p_\omega(\theta,\phi) &\propto |U_0(k\tan\theta\cos\phi, k\tan\theta\sin\phi)|\\
+&= |U_0(kx/z, ky/z)|\,.
+\end{align*} 
+Thus in the paraxial region, 
+\begin{align*}
+\sin\theta \sim \tan \theta \sim \theta\,,\quad (\theta \lesssim 20^\circ)\,.
+\end{align*}
+<li><b>Range of validity in \(z\).</b> The Fresnel approximation is thus appropriate for sound beams for which \(ka \gg 1\) and \(z/a \gtrsim (ka)^{1/3}\), which is much closer to the source than in the Fraunhofer approximation. 
+</li>
+</ul>
+</p>
+</div>
+
+</body>
+</html>
